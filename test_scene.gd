@@ -10,6 +10,7 @@ const MAX_CLIENTS = 2
 func _ready() -> void:
 	multiplayer.peer_connected.connect(_on_peer_connected)
 	multiplayer.connected_to_server.connect(_on_connected_to_server)
+	SyncManager.sync_error.connect(_on_sync_error)
 	server_player.set_multiplayer_authority(1)
 
 func _on_server_button_pressed() -> void:
@@ -33,4 +34,7 @@ func _on_peer_connected(id: int) -> void:
 		client_player.set_multiplayer_authority(id)
 		await get_tree().create_timer(2).timeout
 		SyncManager.start()
-	
+
+func _on_sync_error(msg: String):
+	print(msg)
+	multiplayer.multiplayer_peer = null

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://gk0dkjckgdht"]
+
+[ext_resource type="Script" path="res://shop.gd" id="1_u7kog"]
+
+[node name="Shop" type="Sprite2D" groups=["network_sync"]]
+script = ExtResource("1_u7kog")

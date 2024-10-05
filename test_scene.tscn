@@ -1,8 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://cttmvqll5keqh"]
+[gd_scene load_steps=7 format=3 uid="uid://cttmvqll5keqh"]
 
 [ext_resource type="Script" path="res://test_scene.gd" id="1_x3ou2"]
 [ext_resource type="PackedScene" uid="uid://dr86o8ds1noms" path="res://game_master.tscn" id="2_dce33"]
 [ext_resource type="PackedScene" uid="uid://deatib868gsy5" path="res://player.tscn" id="3_oqkh2"]
+[ext_resource type="PackedScene" uid="uid://gk0dkjckgdht" path="res://shop.tscn" id="4_nt3ix"]
+[ext_resource type="Texture2D" uid="uid://b6mb8dqnw12qf" path="res://icon.svg" id="5_6p7p0"]
+[ext_resource type="PackedScene" uid="uid://b68p0dtp6gx8t" path="res://wall.tscn" id="6_oo273"]
 
 [node name="TestScene" type="Node2D"]
 script = ExtResource("1_x3ou2")
@@ -39,6 +42,15 @@ unique_name_in_owner = true
 
 [node name="ServerPlayer" parent="GameMaster" instance=ExtResource("3_oqkh2")]
 unique_name_in_owner = true
+team = 0
+
+[node name="Shop" parent="GameMaster" instance=ExtResource("4_nt3ix")]
+modulate = Color(0, 0.215686, 1, 1)
+position = Vector2(147, 122)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("5_6p7p0")
+product = ExtResource("6_oo273")
+team = 1
 
 [connection signal="pressed" from="CanvasLayer/ButtonContainer/ServerButton" to="." method="_on_server_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/ButtonContainer/ClientButton" to="." method="_on_client_button_pressed"]
