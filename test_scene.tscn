@@ -1,0 +1,44 @@
+[gd_scene load_steps=4 format=3 uid="uid://cttmvqll5keqh"]
+
+[ext_resource type="Script" path="res://test_scene.gd" id="1_x3ou2"]
+[ext_resource type="PackedScene" uid="uid://dr86o8ds1noms" path="res://game_master.tscn" id="2_dce33"]
+[ext_resource type="PackedScene" uid="uid://deatib868gsy5" path="res://player.tscn" id="3_oqkh2"]
+
+[node name="TestScene" type="Node2D"]
+script = ExtResource("1_x3ou2")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="ButtonContainer" type="HBoxContainer" parent="CanvasLayer"]
+unique_name_in_owner = true
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -65.5
+offset_top = -20.0
+offset_right = 65.5
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="ServerButton" type="Button" parent="CanvasLayer/ButtonContainer"]
+layout_mode = 2
+text = "Server"
+
+[node name="ClientButton" type="Button" parent="CanvasLayer/ButtonContainer"]
+layout_mode = 2
+text = "Client"
+
+[node name="GameMaster" parent="." instance=ExtResource("2_dce33")]
+
+[node name="ClientPlayer" parent="GameMaster" instance=ExtResource("3_oqkh2")]
+unique_name_in_owner = true
+
+[node name="ServerPlayer" parent="GameMaster" instance=ExtResource("3_oqkh2")]
+unique_name_in_owner = true
+
+[connection signal="pressed" from="CanvasLayer/ButtonContainer/ServerButton" to="." method="_on_server_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/ButtonContainer/ClientButton" to="." method="_on_client_button_pressed"]

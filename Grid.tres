@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="Grid" load_steps=2 format=3 uid="uid://gaigi1klt8e5"]
+
+[ext_resource type="Script" path="res://grid.gd" id="1_ti0li"]
+
+[resource]
+script = ExtResource("1_ti0li")
+TILE_HEIGHT = 64
+TILE_WIDTH = 64
