@@ -6,6 +6,7 @@ var MAX_CHARGE: int = int(2.5 * Engine.physics_ticks_per_second)
 var charge: int = 0
 
 func _ready() -> void:
+	super()
 	health = 5 * Engine.physics_ticks_per_second
 
 func interact(player: Player) -> void:
@@ -20,12 +21,15 @@ func place(player: Player, pos: Vector2i) -> void:
 
 func _save_sate() -> Dictionary:
 	return {
+		"active": active,
 		"health": health,
 		"charge": charge,
 		"tile_pos": tile_pos
 	}
 
 func _load_state(state: Dictionary) -> void:
+	active = state["active"]
 	health = state["health"]
 	charge = state["charge"]
 	tile_pos = state["tile_pos"]
+	adjust_size()

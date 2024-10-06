@@ -2,6 +2,7 @@ class_name Wall
 extends Block
 
 func _ready() -> void:
+	super()
 	health = 10 * Engine.physics_ticks_per_second
 
 func interact(player: Player) -> void:
@@ -16,10 +17,13 @@ func place(player: Player, pos: Vector2i) -> void:
 
 func _save_state() -> Dictionary:
 	return {
+		"active": active,
 		"health": health,
 		"tile_pos": tile_pos,
 	}
 	
 func _load_state(state: Dictionary) -> void:
+	active = state["active"]
 	health = state["health"]
 	tile_pos = state["tile_pos"]
+	adjust_size()

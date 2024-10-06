@@ -103,8 +103,12 @@ player1_turnright={
 
 [network]
 
-rollback/debug/rollback_ticks=10
-rollback/debug/random_rollback_ticks=5
+rollback/input_delay=1
+rollback/interpolation=true
+
+[physics]
+
+common/physics_ticks_per_second=30
 
 [rendering]
 

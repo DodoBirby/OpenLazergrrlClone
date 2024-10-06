@@ -4,17 +4,21 @@ extends Sprite2D
 var grid: Grid = preload("res://Grid.tres")
 
 var game_master: GameMaster
+
+var desired_pos: Vector2i
+
+@export var team: int = 1
+
+# Saved state
+var facing: Vector2i
+var held_block: Block
 var tile_pos: Vector2i
 var prev_tile_pos: Vector2i
 var ticks_to_move: int
-var desired_pos: Vector2i
-var registered_move: bool
-var facing: Vector2i
-var held_block: Block
-@export var team: int = 1
+var state: STATES = STATES.STATIONARY
 
 # Ticks to move one tile
-const MOVE_TICKS = 9
+const MOVE_TICKS = 4
 
 # Some calculated values to provide a smooth movement between tiles
 const PIXELS_PER_TICK = grid.TILE_SIZE / MOVE_TICKS
@@ -24,8 +28,6 @@ enum STATES {
 	STATIONARY,
 	MOVING,
 }
-
-var state: STATES = STATES.STATIONARY
 
 func _get_local_input() -> Dictionary:
 	var move_vector: Vector2i = Vector2i.ZERO
@@ -58,7 +60,6 @@ func _get_local_input() -> Dictionary:
 	}
 
 func _network_preprocess(input: Dictionary) -> void:
-	registered_move = false
 	if input["turn_vector"] != Vector2i.ZERO:
 		facing = input["turn_vector"]
 	match state:
@@ -74,6 +75,8 @@ func _network_preprocess(input: Dictionary) -> void:
 				game_master.register_desired_interact(self, tile_pos + facing)
 
 func _network_postprocess(_input: Dictionary) -> void:
+	if held_block:
+		held_block.position = grid.grid_to_map(tile_pos + facing)
 	match state:
 		STATES.MOVING:
 			if ticks_to_move > 0:
@@ -81,6 +84,9 @@ func _network_postprocess(_input: Dictionary) -> void:
 			position = calculate_intermediate_position()
 			if ticks_to_move <= 0:
 				end_move()
+
+func _interpolate_state(old_state: Dictionary, new_state: Dictionary, weight: float) -> void:
+	position = lerp(old_state["position"], new_state["position"], weight)
 
 func calculate_intermediate_position() -> Vector2:
 	var prev_map_pos = grid.grid_to_map(prev_tile_pos)
@@ -108,6 +114,7 @@ func _save_state() -> Dictionary:
 	else:
 		block_path = null
 	return {
+		"position": position,
 		"tile_pos": tile_pos,
 		"prev_tile_pos": prev_tile_pos,
 		"ticks_to_move": ticks_to_move,
@@ -117,6 +124,7 @@ func _save_state() -> Dictionary:
 	}
 
 func _load_state(loaded_state: Dictionary) -> void:
+	position = loaded_state["position"]
 	tile_pos = loaded_state["tile_pos"]
 	prev_tile_pos = loaded_state["prev_tile_pos"]
 	ticks_to_move = loaded_state["ticks_to_move"]
@@ -126,3 +134,5 @@ func _load_state(loaded_state: Dictionary) -> void:
 		held_block = null
 	else:
 		held_block = get_node(loaded_state["held_block"])
+	if held_block:
+		held_block.position = grid.grid_to_map(tile_pos + facing)
