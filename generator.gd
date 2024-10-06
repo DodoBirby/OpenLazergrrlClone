@@ -4,6 +4,7 @@ extends Block
 var MAX_CHARGE: int = int(2.5 * Engine.physics_ticks_per_second)
 
 var charge: int = 0
+var target = null
 
 func _ready() -> void:
 	super()
@@ -19,8 +20,22 @@ func interact(player: Player) -> void:
 func place(player: Player, pos: Vector2i) -> void:
 	game_master.move_hand_to_field(player, pos)
 
-func _save_sate() -> Dictionary:
+func _network_postprocess(_input: Dictionary) -> void:
+	super(_input)
+	charge += 1
+	if charge >= MAX_CHARGE and target:
+		target.power_up()
+		charge = 0
+		
+
+func _save_state() -> Dictionary:
+	var target_path
+	if target:
+		target_path = target.get_path()
+	else:
+		target_path = null
 	return {
+		"target": target_path,
 		"active": active,
 		"health": health,
 		"charge": charge,
@@ -32,4 +47,8 @@ func _load_state(state: Dictionary) -> void:
 	health = state["health"]
 	charge = state["charge"]
 	tile_pos = state["tile_pos"]
+	if state["target"] == null:
+		target = null
+	else:
+		target = get_node(state["target"])
 	adjust_size()

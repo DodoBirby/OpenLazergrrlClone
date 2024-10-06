@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://cttmvqll5keqh"]
+[gd_scene load_steps=9 format=3 uid="uid://cttmvqll5keqh"]
 
 [ext_resource type="Script" path="res://test_scene.gd" id="1_x3ou2"]
 [ext_resource type="PackedScene" uid="uid://dr86o8ds1noms" path="res://game_master.tscn" id="2_dce33"]
@@ -6,6 +6,8 @@
 [ext_resource type="PackedScene" uid="uid://gk0dkjckgdht" path="res://shop.tscn" id="4_nt3ix"]
 [ext_resource type="Texture2D" uid="uid://b6mb8dqnw12qf" path="res://icon.svg" id="5_6p7p0"]
 [ext_resource type="PackedScene" uid="uid://b68p0dtp6gx8t" path="res://wall.tscn" id="6_oo273"]
+[ext_resource type="PackedScene" uid="uid://dk87gmfst21d1" path="res://generator.tscn" id="7_ipnab"]
+[ext_resource type="PackedScene" uid="uid://chl4fwqtwuop5" path="res://lazer.tscn" id="8_tw2p5"]
 
 [node name="TestScene" type="Node2D"]
 script = ExtResource("1_x3ou2")
@@ -50,7 +52,20 @@ position = Vector2(147, 122)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("5_6p7p0")
 product = ExtResource("6_oo273")
-team = 1
+
+[node name="Shop2" parent="GameMaster" instance=ExtResource("4_nt3ix")]
+modulate = Color(0.0431373, 1, 0.0509804, 1)
+position = Vector2(148, 254)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("5_6p7p0")
+product = ExtResource("7_ipnab")
+
+[node name="Shop3" parent="GameMaster" instance=ExtResource("4_nt3ix")]
+modulate = Color(0.470588, 0.501961, 1, 1)
+position = Vector2(311, 192)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("5_6p7p0")
+product = ExtResource("8_tw2p5")
 
 [connection signal="pressed" from="CanvasLayer/ButtonContainer/ServerButton" to="." method="_on_server_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/ButtonContainer/ClientButton" to="." method="_on_client_button_pressed"]
