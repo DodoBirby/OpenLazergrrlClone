@@ -1,0 +1,69 @@
+[gd_scene load_steps=10 format=3 uid="uid://0g1i3mj8c0cy"]
+
+[ext_resource type="Script" path="res://level.gd" id="1_2d1ck"]
+[ext_resource type="PackedScene" uid="uid://dr86o8ds1noms" path="res://game_master.tscn" id="1_xa8k3"]
+[ext_resource type="Texture2D" uid="uid://ccuib4fhixyki" path="res://Floor_64x64.png" id="3_1lb4d"]
+[ext_resource type="Texture2D" uid="uid://c3a6roxo1gcpa" path="res://Energy_64x64.png" id="4_28uwo"]
+[ext_resource type="PackedScene" uid="uid://deatib868gsy5" path="res://player.tscn" id="5_3im4n"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2mema"]
+texture = ExtResource("3_1lb4d")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_sawfi"]
+tile_size = Vector2i(64, 64)
+sources/0 = SubResource("TileSetAtlasSource_2mema")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4upt5"]
+texture = ExtResource("4_28uwo")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_atxoa"]
+tile_size = Vector2i(64, 64)
+sources/0 = SubResource("TileSetAtlasSource_4upt5")
+
+[node name="Level" type="Node"]
+script = ExtResource("1_2d1ck")
+
+[node name="FloorTiles" type="TileMapLayer" parent="."]
+unique_name_in_owner = true
+tile_set = SubResource("TileSet_sawfi")
+
+[node name="Foreground" type="TileMapLayer" parent="."]
+unique_name_in_owner = true
+tile_set = SubResource("TileSet_atxoa")
+
+[node name="Camera" type="Camera2D" parent="."]
+unique_name_in_owner = true
+
+[node name="GameMaster" parent="." node_paths=PackedStringArray("level") instance=ExtResource("1_xa8k3")]
+unique_name_in_owner = true
+level = NodePath("..")
+
+[node name="ClientPlayer" parent="GameMaster" instance=ExtResource("5_3im4n")]
+unique_name_in_owner = true
+
+[node name="ServerPlayer" parent="GameMaster" instance=ExtResource("5_3im4n")]
+unique_name_in_owner = true
+
+[node name="HUD" type="CanvasLayer" parent="."]
+layer = 2
+
+[node name="Player1Bank" type="Label" parent="HUD"]
+unique_name_in_owner = true
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_font_sizes/font_size = 60
+text = "72"
+
+[node name="Player2Bank" type="Label" parent="HUD"]
+unique_name_in_owner = true
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 23.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 60

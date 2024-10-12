@@ -2,6 +2,8 @@ class_name GameMaster
 extends Node
 
 var grid: Grid = preload("res://Grid.tres")
+@export var level: Level
+
 
 var lazers: Array[Lazer]
 var generators: Array[Generator]
@@ -31,15 +33,10 @@ func _ready() -> void:
 		if child is Player:
 			child.game_master = self
 			players.append(child)
-		if child is Shop:
-			child.game_master = self
-			register_block(child, grid.map_to_grid(child.position))
+			child.tile_pos = grid.map_to_grid(child.position)
+			child.prev_tile_pos = child.tile_pos
 			child.position = grid.grid_to_map(child.tile_pos)
-		if child is EnergyCollector:
-			child.game_master = self
-			register_block(child, grid.map_to_grid(child.position))
-			child.position = grid.grid_to_map(child.tile_pos)
-		if child is BaseShop:
+		if child is Block:
 			child.game_master = self
 			register_block(child, grid.map_to_grid(child.position))
 			child.position = grid.grid_to_map(child.tile_pos)
@@ -136,6 +133,9 @@ func find_connecting_blocks(pos: Vector2i, team: int) -> Array[Block]:
 	return result
 
 func can_place(pos: Vector2i) -> bool:
+	if not level.tile_has_floor(pos):
+		return false
+	# We already know the tile is empty of blocks because of where this is called
 	for player in players:
 		if player.tile_pos == pos:
 			return false
@@ -161,7 +161,7 @@ func deregister_block(pos: Vector2i) -> void:
 	block_map.erase(pos)
 
 func register_desired_move(player: Player, move: Vector2i) -> void:
-	if block_map.has(move) or move.x < 0 or move.x > 14 or move.y < 0 or move.y > 10:
+	if block_map.has(move) or not level.tile_has_floor(move):
 		allowed_move[player] = false
 		return
 	desired_moves[move] = desired_moves.get_or_add(move, 0) + 1
