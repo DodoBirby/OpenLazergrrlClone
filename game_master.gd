@@ -3,13 +3,27 @@ extends Node
 
 var grid: Grid = preload("res://Grid.tres")
 
-var players: Array[Player]
 var lazers: Array[Lazer]
 var generators: Array[Generator]
 var allowed_move: Dictionary
 var desired_moves: Dictionary
 var desired_interacts: Dictionary
 var block_map: Dictionary
+#TODO remove this from the gamemaster, it's kinda weird for it to be here
+var base_healthbars: Dictionary = {1: 30 * Engine.physics_ticks_per_second, 2: 30 * Engine.physics_ticks_per_second }
+var base_banks: Dictionary = {1: 0, 2: 0}
+
+# This doesn't have to go into state because it's constant throughout a match
+var collectors: Array[EnergyCollector]
+var players: Array[Player]
+
+# for test game only
+var player1bank: Label = null
+var player2bank: Label = null
+
+func _process(_delta: float) -> void:
+	player1bank.text = str(base_banks[1])
+	player2bank.text = str(base_banks[2])
 
 func _ready() -> void:
 	SyncManager.scene_spawned.connect(_on_scene_spawned)
@@ -21,6 +35,14 @@ func _ready() -> void:
 			child.game_master = self
 			register_block(child, grid.map_to_grid(child.position))
 			child.position = grid.grid_to_map(child.tile_pos)
+		if child is EnergyCollector:
+			child.game_master = self
+			register_block(child, grid.map_to_grid(child.position))
+			child.position = grid.grid_to_map(child.tile_pos)
+		if child is BaseShop:
+			child.game_master = self
+			register_block(child, grid.map_to_grid(child.position))
+			child.position = grid.grid_to_map(child.tile_pos)
 
 func _network_process(_input: Dictionary) -> void:
 	for player in players:
@@ -29,7 +51,7 @@ func _network_process(_input: Dictionary) -> void:
 	desired_moves.clear()
 	
 	for player in desired_interacts:
-		var pos = desired_interacts[player]
+		var pos = desired_interacts[player] + player.tile_pos
 		if block_map.has(pos):
 			block_map[pos].interact(player)
 		elif player.held_block and can_place(pos):
@@ -51,6 +73,10 @@ func _network_process(_input: Dictionary) -> void:
 	for lazer in lazers:
 		if lazer.charge > 0:
 			lazer_shoot(lazer)
+	for collector in collectors:
+		var found_gens = find_all_generators(collector)
+		for gen in found_gens:
+			gen.target = collector
 
 func lazer_shoot(lazer: Lazer):
 	var team = lazer.team
@@ -62,6 +88,21 @@ func lazer_shoot(lazer: Lazer):
 	if block_map.has(current_pos) and block_map[current_pos].team != team:
 		block_map[current_pos].damage()
 
+func find_all_generators(block: Block) -> Array[Generator]:
+	var queue = [block.tile_pos]
+	var seen: Dictionary = { block.tile_pos: true }
+	var team = block.team
+	var result: Array[Generator] = []
+	while queue.size() > 0:
+		var pos = queue.pop_front()
+		if block_map[pos] is Generator and block_map[pos].target == null:
+			result.append(block_map[pos])
+		var neighbours = find_connecting_blocks(pos, team)
+		for neighbour in neighbours:
+			if not seen.has(neighbour.tile_pos):
+				seen[neighbour.tile_pos] = true
+				queue.append(neighbour.tile_pos)
+	return result
 
 func find_closest_generators(lazer: Lazer) -> Array[Generator]:
 	var queue = [lazer.tile_pos]
@@ -109,6 +150,8 @@ func register_block(block: Block, pos: Vector2i) -> void:
 		lazers.append(block)
 	elif block is Generator:
 		generators.append(block)
+	elif block is EnergyCollector:
+		collectors.append(block)
 
 func deregister_block(pos: Vector2i) -> void:
 	if block_map[pos] is Lazer:
@@ -118,7 +161,7 @@ func deregister_block(pos: Vector2i) -> void:
 	block_map.erase(pos)
 
 func register_desired_move(player: Player, move: Vector2i) -> void:
-	if block_map.has(move):
+	if block_map.has(move) or move.x < 0 or move.x > 14 or move.y < 0 or move.y > 10:
 		allowed_move[player] = false
 		return
 	desired_moves[move] = desired_moves.get_or_add(move, 0) + 1
@@ -136,21 +179,31 @@ func move_hand_to_field(player: Player, pos: Vector2i) -> void:
 	var block = player.held_block
 	register_block(block, pos)
 	player.held_block = null
+	
+func deal_base_damage(team: int):
+	base_healthbars[team] -= 1
+	
+func add_to_bank(team: int, amount: int):
+	base_banks[team] += amount
 
 func _save_state() -> Dictionary:
-	var save_state: Dictionary = {"blocks": {}, "lazers": [], "generators": [] }
+	var save_state: Dictionary = {"blocks": {}, "lazers": [], "generators": [], "base_healthbars": {}, "base_banks": {} }
 	for pos in block_map:
 		save_state["blocks"][pos] = block_map[pos].get_path()
 	for lazer in lazers:
 		save_state["lazers"].append(lazer.get_path())
 	for gen in generators:
 		save_state["generators"].append(gen.get_path())
+	save_state["base_healthbars"] = base_healthbars.duplicate()
+	save_state["base_banks"] = base_banks.duplicate()
 	return save_state
 	
 func _load_state(state: Dictionary) -> void:
 	block_map.clear()
 	lazers.clear()
 	generators.clear()
+	base_healthbars = state["base_healthbars"].duplicate()
+	base_banks = state["base_banks"].duplicate()
 	for pos in state["blocks"]:
 		block_map[pos] = get_node(state["blocks"][pos])
 	for lazer in state["lazers"]:

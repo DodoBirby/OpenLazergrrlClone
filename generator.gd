@@ -7,7 +7,8 @@ var charge: int = 0
 var target = null
 
 func _ready() -> void:
-	super()
+	scale.x = 0.5
+	scale.y = 0.5
 	health = 5 * Engine.physics_ticks_per_second
 
 func interact(player: Player) -> void:
@@ -26,7 +27,16 @@ func _network_postprocess(_input: Dictionary) -> void:
 	if charge >= MAX_CHARGE and target:
 		target.power_up()
 		charge = 0
-		
+
+func adjust_size():
+	if active:
+		scale.x = 1
+		scale.y = 1
+		position = grid.grid_to_map(tile_pos)
+	else:
+		scale.x = 0.5
+		scale.y = 0.5
+
 
 func _save_state() -> Dictionary:
 	var target_path

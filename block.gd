@@ -12,8 +12,8 @@ var tile_pos: Vector2i
 var active: bool = false
 
 func _ready() -> void:
-	scale.x = 0.25
-	scale.y = 0.25
+	scale.x = 0.5
+	scale.y = 0.5
 
 func interact(_player: Player) -> void:
 	pass
@@ -26,12 +26,12 @@ func get_connection_directions() -> Array[Vector2i]:
 
 func adjust_size():
 	if active:
-		scale.x = 0.5
-		scale.y = 0.5
+		scale.x = 1
+		scale.y = 1
 		position = grid.grid_to_map(tile_pos)
 	else:
-		scale.x = 0.25
-		scale.y = 0.25
+		scale.x = 0.5
+		scale.y = 0.5
 	
 func _network_process(_input: Dictionary) -> void:
 	adjust_size()

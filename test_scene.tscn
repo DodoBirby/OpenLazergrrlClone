@@ -1,13 +1,54 @@
-[gd_scene load_steps=9 format=3 uid="uid://cttmvqll5keqh"]
+[gd_scene load_steps=21 format=4 uid="uid://cttmvqll5keqh"]
 
 [ext_resource type="Script" path="res://test_scene.gd" id="1_x3ou2"]
 [ext_resource type="PackedScene" uid="uid://dr86o8ds1noms" path="res://game_master.tscn" id="2_dce33"]
 [ext_resource type="PackedScene" uid="uid://deatib868gsy5" path="res://player.tscn" id="3_oqkh2"]
-[ext_resource type="PackedScene" uid="uid://gk0dkjckgdht" path="res://shop.tscn" id="4_nt3ix"]
 [ext_resource type="Texture2D" uid="uid://b6mb8dqnw12qf" path="res://icon.svg" id="5_6p7p0"]
 [ext_resource type="PackedScene" uid="uid://b68p0dtp6gx8t" path="res://wall.tscn" id="6_oo273"]
 [ext_resource type="PackedScene" uid="uid://dk87gmfst21d1" path="res://generator.tscn" id="7_ipnab"]
 [ext_resource type="PackedScene" uid="uid://chl4fwqtwuop5" path="res://lazer.tscn" id="8_tw2p5"]
+[ext_resource type="Texture2D" uid="uid://c3x5cmrgstm54" path="res://tile.png" id="9_nx6di"]
+[ext_resource type="PackedScene" uid="uid://b5v6booiosr5c" path="res://energy_collector.tscn" id="9_s4ahs"]
+[ext_resource type="PackedScene" uid="uid://cunrmt4fkayc1" path="res://base_shop.tscn" id="10_7v3yk"]
+[ext_resource type="Texture2D" uid="uid://dgbfemjplev81" path="res://reactortile.png" id="10_7wkx7"]
+[ext_resource type="Texture2D" uid="uid://ccuib4fhixyki" path="res://Floor_64x64.png" id="10_njcu2"]
+[ext_resource type="Texture2D" uid="uid://c3a6roxo1gcpa" path="res://Energy_64x64.png" id="13_k08mx"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5cj70"]
+texture = ExtResource("10_njcu2")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_78lxo"]
+texture = ExtResource("9_nx6di")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ip6hv"]
+texture = ExtResource("10_7wkx7")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_a2qo4"]
+texture = ExtResource("13_k08mx")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_loq5q"]
+tile_size = Vector2i(64, 64)
+sources/1 = SubResource("TileSetAtlasSource_78lxo")
+sources/2 = SubResource("TileSetAtlasSource_ip6hv")
+sources/0 = SubResource("TileSetAtlasSource_5cj70")
+sources/3 = SubResource("TileSetAtlasSource_a2qo4")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_wmldm"]
+texture = ExtResource("13_k08mx")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_nil83"]
+tile_size = Vector2i(64, 64)
+sources/0 = SubResource("TileSetAtlasSource_wmldm")
 
 [node name="TestScene" type="Node2D"]
 script = ExtResource("1_x3ou2")
@@ -37,35 +78,112 @@ text = "Server"
 layout_mode = 2
 text = "Client"
 
+[node name="StopButton" type="Button" parent="CanvasLayer"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -8.0
+offset_top = -8.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "Stop Game"
+
+[node name="SyncLostLabel" type="Label" parent="CanvasLayer"]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 23.0
+grow_horizontal = 2
+text = "Sync Lost, attempting to regain..."
+
+[node name="Player1Bank" type="Label" parent="CanvasLayer"]
+unique_name_in_owner = true
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_font_sizes/font_size = 60
+text = "72"
+
+[node name="Player2Bank" type="Label" parent="CanvasLayer"]
+unique_name_in_owner = true
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 23.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 60
+
 [node name="GameMaster" parent="." instance=ExtResource("2_dce33")]
+unique_name_in_owner = true
 
 [node name="ClientPlayer" parent="GameMaster" instance=ExtResource("3_oqkh2")]
 unique_name_in_owner = true
+position = Vector2(928, 416)
+team = 2
 
 [node name="ServerPlayer" parent="GameMaster" instance=ExtResource("3_oqkh2")]
 unique_name_in_owner = true
-team = 0
+position = Vector2(160, 416)
 
-[node name="Shop" parent="GameMaster" instance=ExtResource("4_nt3ix")]
-modulate = Color(0, 0.215686, 1, 1)
-position = Vector2(147, 122)
+[node name="EnergyCollector" parent="GameMaster" instance=ExtResource("9_s4ahs")]
+position = Vector2(160, 32)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("5_6p7p0")
-product = ExtResource("6_oo273")
+team = 1
 
-[node name="Shop2" parent="GameMaster" instance=ExtResource("4_nt3ix")]
-modulate = Color(0.0431373, 1, 0.0509804, 1)
-position = Vector2(148, 254)
+[node name="EnergyCollector2" parent="GameMaster" instance=ExtResource("9_s4ahs")]
+position = Vector2(160, 800)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("5_6p7p0")
+team = 1
+
+[node name="BaseShop1Gen" parent="GameMaster" instance=ExtResource("10_7v3yk")]
+position = Vector2(32, 352)
 product = ExtResource("7_ipnab")
+team = 1
 
-[node name="Shop3" parent="GameMaster" instance=ExtResource("4_nt3ix")]
-modulate = Color(0.470588, 0.501961, 1, 1)
-position = Vector2(311, 192)
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("5_6p7p0")
+[node name="BaseShop1Wall" parent="GameMaster" instance=ExtResource("10_7v3yk")]
+position = Vector2(32, 416)
+product = ExtResource("6_oo273")
+team = 1
+
+[node name="BaseShop1Lazer" parent="GameMaster" instance=ExtResource("10_7v3yk")]
+position = Vector2(32, 480)
 product = ExtResource("8_tw2p5")
+team = 1
+
+[node name="Tiles" type="TileMapLayer" parent="."]
+unique_name_in_owner = true
+tile_map_data = PackedByteArray("AAABAAEAAAAAAAAAAAABAAIAAAAAAAAAAAABAAMAAAAAAAAAAAABAAQAAAAAAAAAAAABAAYAAAAAAAAAAAABAAUAAAAAAAAAAAABAAcAAAAAAAAAAAABAAgAAAAAAAAAAAABAAkAAAAAAAAAAAACAAkAAAAAAAAAAAADAAkAAAAAAAAAAAAEAAkAAAAAAAAAAAAFAAkAAAAAAAAAAAAGAAkAAAAAAAAAAAAHAAkAAAAAAAAAAAAIAAkAAAAAAAAAAAAJAAkAAAAAAAAAAAAJAAgAAAAAAAAAAAAIAAgAAAAAAAAAAAAHAAgAAAAAAAAAAAAGAAgAAAAAAAAAAAAFAAgAAAAAAAAAAAAEAAgAAAAAAAAAAAADAAgAAAAAAAAAAAACAAgAAAAAAAAAAAACAAcAAAAAAAAAAAADAAcAAAAAAAAAAAAEAAcAAAAAAAAAAAAFAAcAAAAAAAAAAAAGAAcAAAAAAAAAAAAHAAcAAAAAAAAAAAAIAAcAAAAAAAAAAAAJAAcAAAAAAAAAAAACAAEAAAAAAAAAAAACAAIAAAAAAAAAAAACAAMAAAAAAAAAAAADAAEAAAAAAAAAAAADAAIAAAAAAAAAAAADAAMAAAAAAAAAAAACAAQAAAAAAAAAAAACAAUAAAAAAAAAAAACAAYAAAAAAAAAAAADAAQAAAAAAAAAAAADAAUAAAAAAAAAAAADAAYAAAAAAAAAAAAEAAIAAAAAAAAAAAAEAAMAAAAAAAAAAAAFAAEAAAAAAAAAAAAFAAIAAAAAAAAAAAAFAAMAAAAAAAAAAAAEAAQAAAAAAAAAAAAEAAUAAAAAAAAAAAAEAAYAAAAAAAAAAAAFAAQAAAAAAAAAAAAFAAUAAAAAAAAAAAAFAAYAAAAAAAAAAAAEAAEAAAAAAAAAAAAGAAEAAAAAAAAAAAAHAAEAAAAAAAAAAAAHAAIAAAAAAAAAAAAHAAMAAAAAAAAAAAAIAAMAAAAAAAAAAAAIAAQAAAAAAAAAAAAIAAUAAAAAAAAAAAAGAAIAAAAAAAAAAAAHAAQAAAAAAAAAAAAJAAYAAAAAAAAAAAAGAAMAAAAAAAAAAAAJAAEAAAAAAAAAAAAJAAIAAAAAAAAAAAAIAAEAAAAAAAAAAAAIAAIAAAAAAAAAAAAJAAMAAAAAAAAAAAAJAAQAAAAAAAAAAAAJAAUAAAAAAAAAAAAIAAYAAAAAAAAAAAAHAAYAAAAAAAAAAAAGAAYAAAAAAAAAAAAGAAUAAAAAAAAAAAAGAAQAAAAAAAAAAAAHAAUAAAAAAAAAAAAKAAEAAAAAAAAAAAAKAAIAAAAAAAAAAAAKAAMAAAAAAAAAAAAKAAQAAAAAAAAAAAAKAAUAAAAAAAAAAAAKAAYAAAAAAAAAAAAKAAcAAAAAAAAAAAAKAAgAAAAAAAAAAAAKAAkAAAAAAAAAAAAOAAEAAAAAAAAAAAAOAAIAAAAAAAAAAAAOAAMAAAAAAAAAAAAOAAQAAAAAAAAAAAAOAAUAAAAAAAAAAAAOAAYAAAAAAAAAAAAOAAcAAAAAAAAAAAAOAAgAAAAAAAAAAAAOAAkAAAAAAAAAAAANAAkAAAAAAAAAAAAMAAkAAAAAAAAAAAALAAkAAAAAAAAAAAALAAgAAAAAAAAAAAAMAAgAAAAAAAAAAAANAAgAAAAAAAAAAAANAAcAAAAAAAAAAAAMAAcAAAAAAAAAAAALAAcAAAAAAAAAAAALAAYAAAAAAAAAAAAMAAYAAAAAAAAAAAANAAYAAAAAAAAAAAANAAUAAAAAAAAAAAAMAAUAAAAAAAAAAAALAAUAAAAAAAAAAAALAAQAAAAAAAAAAAAMAAQAAAAAAAAAAAANAAQAAAAAAAAAAAANAAMAAAAAAAAAAAAMAAMAAAAAAAAAAAALAAMAAAAAAAAAAAALAAIAAAAAAAAAAAAMAAIAAAAAAAAAAAANAAIAAAAAAAAAAAAMAAEAAAAAAAAAAAALAAEAAAAAAAAAAAANAAEAAAAAAAAAAAABAAoAAAAAAAAAAAACAAoAAAAAAAAAAAADAAoAAAAAAAAAAAAEAAoAAAAAAAAAAAAFAAoAAAAAAAAAAAAGAAoAAAAAAAAAAAAHAAoAAAAAAAAAAAAIAAoAAAAAAAAAAAAJAAoAAAAAAAAAAAAKAAoAAAAAAAAAAAALAAoAAAAAAAAAAAAMAAoAAAAAAAAAAAANAAoAAAAAAAAAAAAOAAoAAAAAAAAAAAABAAsAAAAAAAAAAAACAAsAAAAAAAAAAAADAAsAAAAAAAAAAAAEAAsAAAAAAAAAAAAFAAsAAAAAAAAAAAAGAAsAAAAAAAAAAAAHAAsAAAAAAAAAAAAIAAsAAAAAAAAAAAAJAAsAAAAAAAAAAAAKAAsAAAAAAAAAAAALAAsAAAAAAAAAAAAMAAsAAAAAAAAAAAANAAsAAAAAAAAAAAAOAAsAAAAAAAAAAAAPAAsAAAAAAAAAAAAPAAoAAAAAAAAAAAAPAAkAAAAAAAAAAAAPAAgAAAAAAAAAAAAPAAcAAAAAAAAAAAAPAAYAAAAAAAAAAAAPAAUAAAAAAAAAAAAPAAQAAAAAAAAAAAAPAAMAAAAAAAAAAAAPAAIAAAAAAAAAAAAPAAEAAAAAAAAAAAA=")
+tile_set = SubResource("TileSet_loq5q")
+
+[node name="Reactors" type="TileMapLayer" parent="."]
+tile_map_data = PackedByteArray("AAADAAMAAAAAAAAAAAADAAkAAAAAAAAAAAANAAkAAAAAAAAAAAANAAMAAAAAAAAAAAAKAAMAAAAAAAAAAAAIAAMAAAAAAAAAAAAGAAMAAAAAAAAAAAAGAAYAAAAAAAAAAAAIAAYAAAAAAAAAAAAKAAYAAAAAAAAAAAAKAAkAAAAAAAAAAAAIAAkAAAAAAAAAAAAGAAkAAAAAAAAAAAA=")
+tile_set = SubResource("TileSet_nil83")
+
+[node name="Background" type="CanvasLayer" parent="."]
+unique_name_in_owner = true
+layer = -1
+visible = false
+
+[node name="ColorRect" type="ColorRect" parent="Background"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Camera" type="Camera2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(-215, -70)
 
 [connection signal="pressed" from="CanvasLayer/ButtonContainer/ServerButton" to="." method="_on_server_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/ButtonContainer/ClientButton" to="." method="_on_client_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/StopButton" to="." method="_on_stop_button_pressed"]

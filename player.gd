@@ -18,7 +18,7 @@ var ticks_to_move: int
 var state: STATES = STATES.STATIONARY
 
 # Ticks to move one tile
-const MOVE_TICKS = 4
+const MOVE_TICKS = 9
 
 # Some calculated values to provide a smooth movement between tiles
 const PIXELS_PER_TICK = grid.TILE_SIZE / MOVE_TICKS
@@ -28,6 +28,12 @@ enum STATES {
 	STATIONARY,
 	MOVING,
 }
+
+func _predict_remote_input(previous_input: Dictionary, _ticks_since_real_input: int) -> Dictionary:
+	var input = previous_input.duplicate()
+	input["action"] = false
+	input["turn_vector"] = Vector2i.ZERO
+	return input
 
 func _get_local_input() -> Dictionary:
 	var move_vector: Vector2i = Vector2i.ZERO
@@ -51,8 +57,6 @@ func _get_local_input() -> Dictionary:
 	var action: bool = false
 	if turn_vector != Vector2i.ZERO:
 		action = true
-	if turn_vector == Vector2i.ZERO:
-		turn_vector = move_vector
 	return {
 		"move_vector": move_vector,
 		"turn_vector": turn_vector,
@@ -60,19 +64,23 @@ func _get_local_input() -> Dictionary:
 	}
 
 func _network_preprocess(input: Dictionary) -> void:
-	if input["turn_vector"] != Vector2i.ZERO:
-		facing = input["turn_vector"]
+	if input.is_empty():
+		input = {"move_vector": Vector2i.ZERO, "turn_vector": Vector2i.ZERO, "action": false}
+	if input.get("turn_vector") != Vector2i.ZERO:
+		facing = input.get("turn_vector")
 	match state:
 		STATES.STATIONARY:
-			desired_pos = tile_pos + input["move_vector"]
+			desired_pos = tile_pos + input.get("move_vector")
 			game_master.register_desired_move(self, desired_pos)
-			if input["action"]:
-				game_master.register_desired_interact(self, tile_pos + facing)
+			if input.get("action"):
+				game_master.register_desired_interact(self, facing)
+			if input.get("move_vector") != Vector2i.ZERO:
+				facing = input.get("move_vector")
 		STATES.MOVING:
 			desired_pos = tile_pos
 			game_master.register_desired_move(self, desired_pos)
-			if input["action"]:
-				game_master.register_desired_interact(self, tile_pos + facing)
+			if input.get("action"):
+				game_master.register_desired_interact(self, facing)
 
 func _network_postprocess(_input: Dictionary) -> void:
 	if held_block:
