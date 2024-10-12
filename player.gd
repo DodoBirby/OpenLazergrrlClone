@@ -30,6 +30,8 @@ enum STATES {
 }
 
 func _predict_remote_input(previous_input: Dictionary, _ticks_since_real_input: int) -> Dictionary:
+	if previous_input.is_empty():
+		return {}
 	var input = previous_input.duplicate()
 	input["action"] = false
 	input["turn_vector"] = Vector2i.ZERO
