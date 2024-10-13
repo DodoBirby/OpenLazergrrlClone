@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bl0ejbkhq4evg"
-path="res://.godot/imported/Lazer_-_Red_64x64.png-e544b0a487d7502e282eac00b5d90574.ctex"
+uid="uid://b7xp5h6h076wp"
+path="res://.godot/imported/Floor_64x64.png-f8024bd143376af8257df2241c1388e6.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Lazer_-_Red_64x64.png"
-dest_files=["res://.godot/imported/Lazer_-_Red_64x64.png-e544b0a487d7502e282eac00b5d90574.ctex"]
+source_file="res://Assets/Floor_64x64.png"
+dest_files=["res://.godot/imported/Floor_64x64.png-f8024bd143376af8257df2241c1388e6.ctex"]
 
 [params]
 

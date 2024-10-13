@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c3a6roxo1gcpa"
-path="res://.godot/imported/Energy_64x64.png-069c3cb8b96fc69870ed3ca4fce4b2f3.ctex"
+uid="uid://dryxtjkkofqlq"
+path="res://.godot/imported/Super_Lazer_-_Red_64x64.png-a2ab892494fbba003b5f582514d1c61a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Energy_64x64.png"
-dest_files=["res://.godot/imported/Energy_64x64.png-069c3cb8b96fc69870ed3ca4fce4b2f3.ctex"]
+source_file="res://Assets/Red/Super_Lazer_-_Red_64x64.png"
+dest_files=["res://.godot/imported/Super_Lazer_-_Red_64x64.png-a2ab892494fbba003b5f582514d1c61a.ctex"]
 
 [params]
 

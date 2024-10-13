@@ -1,8 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://gk0dkjckgdht"]
+[gd_scene load_steps=2 format=3 uid="uid://gk0dkjckgdht"]
 
-[ext_resource type="Texture2D" uid="uid://csxrcbcw8xw0w" path="res://Barrier_Shop_-_Red_64x64.png" id="1_2tc5e"]
 [ext_resource type="Script" path="res://shop.gd" id="1_u7kog"]
 
 [node name="Shop" type="Sprite2D" groups=["network_sync"]]
-texture = ExtResource("1_2tc5e")
 script = ExtResource("1_u7kog")

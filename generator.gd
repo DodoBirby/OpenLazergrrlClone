@@ -6,10 +6,19 @@ var MAX_CHARGE: int = int(2.5 * Engine.physics_ticks_per_second)
 var charge: int = 0
 var target = null
 
+var blue_texture = preload("res://Assets/Blue/Generator_-_Blue_64x64.png")
+var red_texture = preload("res://Assets/Red/Generator_-_Red_64x64.png")
+
 func _ready() -> void:
 	scale.x = 0.5
 	scale.y = 0.5
 	health = 5 * Engine.physics_ticks_per_second
+
+func set_team_texture():
+	if team == 1:
+		texture = red_texture
+	else:
+		texture = blue_texture
 
 func interact(player: Player) -> void:
 	if player.team != team:

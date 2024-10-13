@@ -2,38 +2,38 @@
 
 [ext_resource type="Script" path="res://level.gd" id="1_2d1ck"]
 [ext_resource type="PackedScene" uid="uid://dr86o8ds1noms" path="res://game_master.tscn" id="1_xa8k3"]
-[ext_resource type="Texture2D" uid="uid://ccuib4fhixyki" path="res://Floor_64x64.png" id="3_1lb4d"]
-[ext_resource type="Texture2D" uid="uid://c3a6roxo1gcpa" path="res://Energy_64x64.png" id="4_28uwo"]
+[ext_resource type="Texture2D" uid="uid://b7xp5h6h076wp" path="res://Assets/Floor_64x64.png" id="2_3rghb"]
+[ext_resource type="Texture2D" uid="uid://cwlgt68nmwqgs" path="res://Assets/Energy_64x64.png" id="3_8xk2a"]
 [ext_resource type="PackedScene" uid="uid://deatib868gsy5" path="res://player.tscn" id="5_3im4n"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2mema"]
-texture = ExtResource("3_1lb4d")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_hybdx"]
+texture = ExtResource("2_3rghb")
 texture_region_size = Vector2i(64, 64)
 0:0/0 = 0
 
-[sub_resource type="TileSet" id="TileSet_sawfi"]
+[sub_resource type="TileSet" id="TileSet_rk0rq"]
 tile_size = Vector2i(64, 64)
-sources/0 = SubResource("TileSetAtlasSource_2mema")
+sources/0 = SubResource("TileSetAtlasSource_hybdx")
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4upt5"]
-texture = ExtResource("4_28uwo")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_qfr8m"]
+texture = ExtResource("3_8xk2a")
 texture_region_size = Vector2i(64, 64)
 0:0/0 = 0
 
-[sub_resource type="TileSet" id="TileSet_atxoa"]
+[sub_resource type="TileSet" id="TileSet_ha4w3"]
 tile_size = Vector2i(64, 64)
-sources/0 = SubResource("TileSetAtlasSource_4upt5")
+sources/0 = SubResource("TileSetAtlasSource_qfr8m")
 
 [node name="Level" type="Node"]
 script = ExtResource("1_2d1ck")
 
 [node name="FloorTiles" type="TileMapLayer" parent="."]
 unique_name_in_owner = true
-tile_set = SubResource("TileSet_sawfi")
+tile_set = SubResource("TileSet_rk0rq")
 
 [node name="Foreground" type="TileMapLayer" parent="."]
 unique_name_in_owner = true
-tile_set = SubResource("TileSet_atxoa")
+tile_set = SubResource("TileSet_ha4w3")
 
 [node name="Camera" type="Camera2D" parent="."]
 unique_name_in_owner = true

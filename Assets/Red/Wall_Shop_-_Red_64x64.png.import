@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://caebdw7rnyt0f"
-path="res://.godot/imported/Generator_-_Red_64x64.png-61a4b234f0e43dabaa6e27b1b0f6a9ef.ctex"
+uid="uid://ddopkjfbo0kpx"
+path="res://.godot/imported/Wall_Shop_-_Red_64x64.png-da0655bc9dcedc2790be856a6bd1de65.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Generator_-_Red_64x64.png"
-dest_files=["res://.godot/imported/Generator_-_Red_64x64.png-61a4b234f0e43dabaa6e27b1b0f6a9ef.ctex"]
+source_file="res://Assets/Red/Wall_Shop_-_Red_64x64.png"
+dest_files=["res://.godot/imported/Wall_Shop_-_Red_64x64.png-da0655bc9dcedc2790be856a6bd1de65.ctex"]
 
 [params]
 

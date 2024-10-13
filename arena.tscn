@@ -1,10 +1,16 @@
-[gd_scene load_steps=6 format=4 uid="uid://cf8oiwjc05gon"]
+[gd_scene load_steps=12 format=4 uid="uid://cf8oiwjc05gon"]
 
 [ext_resource type="PackedScene" uid="uid://0g1i3mj8c0cy" path="res://level.tscn" id="1_ixk5j"]
 [ext_resource type="PackedScene" uid="uid://cunrmt4fkayc1" path="res://base_shop.tscn" id="2_l01mi"]
 [ext_resource type="PackedScene" uid="uid://dk87gmfst21d1" path="res://generator.tscn" id="3_0g1f0"]
+[ext_resource type="Texture2D" uid="uid://bydt4nbqdjf8f" path="res://Assets/Red/Generator_Shop_-_Red_64x64.png" id="3_yhf4s"]
 [ext_resource type="PackedScene" uid="uid://b68p0dtp6gx8t" path="res://wall.tscn" id="4_ewa2h"]
 [ext_resource type="PackedScene" uid="uid://chl4fwqtwuop5" path="res://lazer.tscn" id="5_dsuc5"]
+[ext_resource type="Texture2D" uid="uid://ddopkjfbo0kpx" path="res://Assets/Red/Wall_Shop_-_Red_64x64.png" id="5_uk3he"]
+[ext_resource type="Texture2D" uid="uid://dsje0q25cyw1r" path="res://Assets/Red/Lazer_Shop_-_Red_64x64.png" id="7_tyaiw"]
+[ext_resource type="Texture2D" uid="uid://db1sse1p63uin" path="res://Assets/Blue/Generator_Shop_-_Blue_64x64.png" id="9_qe83u"]
+[ext_resource type="Texture2D" uid="uid://bln6wwkvad3y8" path="res://Assets/Blue/Wall_Shop_-_Blue_64x64.png" id="10_y057k"]
+[ext_resource type="Texture2D" uid="uid://byf3nib8h8fpl" path="res://Assets/Blue/Lazer_Shop_-_Blue_64x64.png" id="11_1dajd"]
 
 [node name="Arena" instance=ExtResource("1_ixk5j")]
 
@@ -23,15 +29,36 @@ position = Vector2(160, 416)
 
 [node name="BaseShop" parent="GameMaster" index="2" instance=ExtResource("2_l01mi")]
 position = Vector2(32, 352)
+texture = ExtResource("3_yhf4s")
 product = ExtResource("3_0g1f0")
 team = 1
 
 [node name="BaseShop2" parent="GameMaster" index="3" instance=ExtResource("2_l01mi")]
 position = Vector2(32, 416)
+texture = ExtResource("5_uk3he")
 product = ExtResource("4_ewa2h")
 team = 1
 
 [node name="BaseShop3" parent="GameMaster" index="4" instance=ExtResource("2_l01mi")]
 position = Vector2(32, 480)
+texture = ExtResource("7_tyaiw")
 product = ExtResource("5_dsuc5")
 team = 1
+
+[node name="BaseShop4" parent="GameMaster" index="5" instance=ExtResource("2_l01mi")]
+position = Vector2(1056, 352)
+texture = ExtResource("9_qe83u")
+product = ExtResource("3_0g1f0")
+team = 2
+
+[node name="BaseShop5" parent="GameMaster" index="6" instance=ExtResource("2_l01mi")]
+position = Vector2(1056, 416)
+texture = ExtResource("10_y057k")
+product = ExtResource("4_ewa2h")
+team = 2
+
+[node name="BaseShop6" parent="GameMaster" index="7" instance=ExtResource("2_l01mi")]
+position = Vector2(1056, 480)
+texture = ExtResource("11_1dajd")
+product = ExtResource("5_dsuc5")
+team = 2

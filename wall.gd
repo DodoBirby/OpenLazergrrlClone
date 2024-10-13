@@ -1,9 +1,18 @@
 class_name Wall
 extends Block
 
+var blue_texture = preload("res://Assets/Blue/Wall_-_Blue_64x64.png")
+var red_texture = preload("res://Assets/Red/Wall_-_Red_64x64.png")
+
 func _ready() -> void:
 	super()
 	health = 10 * Engine.physics_ticks_per_second
+	
+func set_team_texture():
+	if team == 1:
+		texture = red_texture
+	else:
+		texture = blue_texture
 
 func interact(player: Player) -> void:
 	if player.team != team:

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dgbfemjplev81"
-path="res://.godot/imported/reactortile.png-21030b0e6705ed0987f09b16a9a7bbfb.ctex"
+uid="uid://hrd2laua3euv"
+path="res://.godot/imported/Barrier_Shop_-_Blue_64x64.png-84a72ae953f52587b29697d3901b86d3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://reactortile.png"
-dest_files=["res://.godot/imported/reactortile.png-21030b0e6705ed0987f09b16a9a7bbfb.ctex"]
+source_file="res://Assets/Blue/Barrier_Shop_-_Blue_64x64.png"
+dest_files=["res://.godot/imported/Barrier_Shop_-_Blue_64x64.png-84a72ae953f52587b29697d3901b86d3.ctex"]
 
 [params]
 

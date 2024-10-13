@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://e5bnmvo0ffdy"
-path="res://.godot/imported/Barrier_-_Red_64x64.png-94d8b3877152609c113ed6c9b5b70b0c.ctex"
+uid="uid://0blk4u84ja7o"
+path="res://.godot/imported/Wall_-_Red_64x64.png-ff07b3c9ef380af57389b83c16cbb62d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Barrier_-_Red_64x64.png"
-dest_files=["res://.godot/imported/Barrier_-_Red_64x64.png-94d8b3877152609c113ed6c9b5b70b0c.ctex"]
+source_file="res://Assets/Red/Wall_-_Red_64x64.png"
+dest_files=["res://.godot/imported/Wall_-_Red_64x64.png-ff07b3c9ef380af57389b83c16cbb62d.ctex"]
 
 [params]
 

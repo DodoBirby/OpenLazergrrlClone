@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bfil3ubaup7i7"
-path="res://.godot/imported/gen.png-01d3b3ce962789eb8ef03df8b4accdce.ctex"
+uid="uid://byf3nib8h8fpl"
+path="res://.godot/imported/Lazer_Shop_-_Blue_64x64.png-f00d7d08144d0cb6e67c622541e39da8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://gen.png"
-dest_files=["res://.godot/imported/gen.png-01d3b3ce962789eb8ef03df8b4accdce.ctex"]
+source_file="res://Assets/Blue/Lazer_Shop_-_Blue_64x64.png"
+dest_files=["res://.godot/imported/Lazer_Shop_-_Blue_64x64.png-f00d7d08144d0cb6e67c622541e39da8.ctex"]
 
 [params]
 

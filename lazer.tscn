@@ -1,8 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://chl4fwqtwuop5"]
+[gd_scene load_steps=2 format=3 uid="uid://chl4fwqtwuop5"]
 
 [ext_resource type="Script" path="res://lazer.gd" id="1_m3xch"]
-[ext_resource type="Texture2D" uid="uid://bl0ejbkhq4evg" path="res://Lazer_-_Red_64x64.png" id="1_xqy52"]
 
 [node name="Lazer" type="Sprite2D" groups=["network_sync"]]
-texture = ExtResource("1_xqy52")
 script = ExtResource("1_m3xch")

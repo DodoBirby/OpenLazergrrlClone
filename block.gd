@@ -32,6 +32,11 @@ func adjust_size():
 	else:
 		scale.x = 0.5
 		scale.y = 0.5
+	if team == 2:
+		scale.x = -scale.x
+
+func set_team_texture():
+	pass
 	
 func _network_process(_input: Dictionary) -> void:
 	adjust_size()
