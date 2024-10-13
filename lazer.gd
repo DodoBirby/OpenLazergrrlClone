@@ -8,6 +8,20 @@ var facing: Vector2i = Vector2i.RIGHT
 var blue_texture = preload("res://Assets/Blue/Lazer_-_Blue_64x64.png")
 var red_texture = preload("res://Assets/Red/Lazer_-_Red_64x64.png")
 
+var target_pos: Vector2i = Vector2i.MIN:
+	set(value):
+		target_pos = value
+		queue_redraw()
+
+func _draw() -> void:
+	draw_set_transform(Vector2.ZERO, 0.0, scale)
+	if target_pos == Vector2i.MIN:
+		return
+	var start_pos = facing * grid._half_size
+	var end_pos = grid.grid_to_map(target_pos) - facing * grid._half_size - Vector2i(position)
+	var color = Color(1, 0, 0) if team == 1 else Color(0, 0, 1)
+	draw_line(start_pos, end_pos, color, 16)
+
 func _ready() -> void:
 	super()
 	health = 5 * Engine.physics_ticks_per_second
@@ -26,6 +40,8 @@ func interact(player: Player) -> void:
 		return
 	if player.held_block:
 		return
+	target_pos = Vector2i.MIN
+	charge = 0
 	game_master.move_block_to_hand(player, self)
 	
 func place(player: Player, pos: Vector2i) -> void:

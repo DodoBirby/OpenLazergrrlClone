@@ -71,6 +71,8 @@ func _network_process(_input: Dictionary) -> void:
 	for lazer in lazers:
 		if lazer.charge > 0:
 			lazer_shoot(lazer)
+		else:
+			lazer.target_pos = Vector2i.MIN
 	for collector in collectors:
 		var found_gens = find_all_generators(collector)
 		for gen in found_gens:
@@ -81,10 +83,17 @@ func lazer_shoot(lazer: Lazer):
 	var facing = lazer.facing
 	var starting_pos = lazer.tile_pos + facing
 	var current_pos = starting_pos
-	while not block_map.has(current_pos) and level.tile_has_floor(current_pos):
+	while not block_map.has(current_pos) and level.tile_has_floor(current_pos) and not has_player(current_pos):
 		current_pos += facing
+	lazer.target_pos = current_pos
 	if block_map.has(current_pos) and block_map[current_pos].team != team:
 		block_map[current_pos].damage()
+
+func has_player(pos: Vector2i) -> bool:
+	for player in players:
+		if player.tile_pos == pos:
+			return true
+	return false
 
 func find_all_generators(block: Block) -> Array[Generator]:
 	var queue = [block.tile_pos]

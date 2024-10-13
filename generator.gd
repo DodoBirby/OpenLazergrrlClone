@@ -32,6 +32,8 @@ func place(player: Player, pos: Vector2i) -> void:
 
 func _network_postprocess(_input: Dictionary) -> void:
 	super(_input)
+	if !active:
+		return
 	charge += 1
 	if charge >= MAX_CHARGE and target:
 		target.power_up()
@@ -50,6 +52,7 @@ func adjust_size():
 func _save_state() -> Dictionary:
 	var target_path
 	if target:
+		#TODO Fix dangling reference when target dies
 		target_path = target.get_path()
 	else:
 		target_path = null
