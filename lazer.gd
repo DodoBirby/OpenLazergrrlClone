@@ -13,10 +13,13 @@ func _ready() -> void:
 	health = 5 * Engine.physics_ticks_per_second
 
 func set_team_texture():
+	# Temporarily putting lazer facing in here because it's convenient
 	if team == 1:
 		texture = red_texture
+		facing = Vector2i.RIGHT
 	else:
 		texture = blue_texture
+		facing = Vector2i.LEFT
 
 func interact(player: Player) -> void:
 	if player.team != team:

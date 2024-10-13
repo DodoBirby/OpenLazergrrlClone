@@ -40,6 +40,7 @@ func _ready() -> void:
 			child.game_master = self
 			register_block(child, grid.map_to_grid(child.position))
 			child.position = grid.grid_to_map(child.tile_pos)
+			child.set_team_texture()
 
 func _network_process(_input: Dictionary) -> void:
 	for player in players:
@@ -80,7 +81,7 @@ func lazer_shoot(lazer: Lazer):
 	var facing = lazer.facing
 	var starting_pos = lazer.tile_pos + facing
 	var current_pos = starting_pos
-	while not block_map.has(current_pos) and current_pos.x <= 15:
+	while not block_map.has(current_pos) and level.tile_has_floor(current_pos):
 		current_pos += facing
 	if block_map.has(current_pos) and block_map[current_pos].team != team:
 		block_map[current_pos].damage()
@@ -182,6 +183,8 @@ func move_hand_to_field(player: Player, pos: Vector2i) -> void:
 	
 func deal_base_damage(team: int):
 	base_healthbars[team] -= 1
+	if base_healthbars[team] <= 0:
+		print("%s team loses" % team)
 	
 func add_to_bank(team: int, amount: int):
 	base_banks[team] += amount
