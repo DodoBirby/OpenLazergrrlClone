@@ -1,7 +1,10 @@
 class_name Generator
 extends Block
 
+@onready var sprite: Sprite2D = $Sprite
+
 var MAX_CHARGE: int = int(2.5 * Engine.physics_ticks_per_second)
+
 
 var charge: int = 0
 var target = null
@@ -16,9 +19,9 @@ func _ready() -> void:
 
 func set_team_texture():
 	if team == 1:
-		texture = red_texture
+		sprite.texture = red_texture
 	else:
-		texture = blue_texture
+		sprite.texture = blue_texture
 
 func interact(player: Player) -> void:
 	if player.team != team:

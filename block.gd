@@ -1,5 +1,5 @@
 class_name Block
-extends Sprite2D
+extends Node2D
 
 var grid: Grid = preload("res://Grid.tres")
 

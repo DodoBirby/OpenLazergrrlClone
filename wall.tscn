@@ -2,5 +2,7 @@
 
 [ext_resource type="Script" path="res://wall.gd" id="1_765ea"]
 
-[node name="Wall" type="Sprite2D" groups=["network_sync"]]
+[node name="Wall" type="Node2D" groups=["network_sync"]]
 script = ExtResource("1_765ea")
+
+[node name="Sprite" type="Sprite2D" parent="."]

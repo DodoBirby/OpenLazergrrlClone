@@ -2,5 +2,8 @@
 
 [ext_resource type="Script" path="res://base_shop.gd" id="1_w0qeu"]
 
-[node name="BaseShop" type="Sprite2D" groups=["network_sync"]]
+[node name="BaseShop" type="Node2D" groups=["network_sync"]]
 script = ExtResource("1_w0qeu")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+unique_name_in_owner = true

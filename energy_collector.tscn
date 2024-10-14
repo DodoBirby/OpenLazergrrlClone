@@ -2,5 +2,7 @@
 
 [ext_resource type="Script" path="res://energy_collector.gd" id="1_jgh2j"]
 
-[node name="EnergyCollector" type="Sprite2D" groups=["network_sync"]]
+[node name="EnergyCollector" type="Node2D" groups=["network_sync"]]
 script = ExtResource("1_jgh2j")
+
+[node name="Sprite" type="Sprite2D" parent="."]

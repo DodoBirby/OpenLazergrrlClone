@@ -4,6 +4,7 @@ extends Node
 var grid: Grid = preload("res://Grid.tres")
 @export var level: Level
 
+#TODO spawn pre-placed blocks on sync_started signal or else they can't be despawned
 
 var lazers: Array[Lazer]
 var generators: Array[Generator]

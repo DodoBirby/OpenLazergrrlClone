@@ -1,6 +1,8 @@
 class_name Lazer
 extends Block
 
+@onready var sprite: Sprite2D = %Sprite
+
 var MAX_CHARGE: int = 3 * Engine.physics_ticks_per_second
 var charge: int = 0
 var facing: Vector2i = Vector2i.RIGHT
@@ -14,7 +16,6 @@ var target_pos: Vector2i = Vector2i.MIN:
 		queue_redraw()
 
 func _draw() -> void:
-	draw_set_transform(Vector2.ZERO, 0.0, scale)
 	if target_pos == Vector2i.MIN:
 		return
 	var start_pos = facing * grid._half_size
@@ -22,17 +23,31 @@ func _draw() -> void:
 	var color = Color(1, 0, 0) if team == 1 else Color(0, 0, 1)
 	draw_line(start_pos, end_pos, color, 16)
 
+func adjust_size():
+	if active:
+		sprite.scale.x = 1
+		sprite.scale.y = 1
+		position = grid.grid_to_map(tile_pos)
+	else:
+		sprite.scale.x = 0.5
+		sprite.scale.y = 0.5
+	if team == 2:
+		sprite.scale.x = -sprite.scale.x
+
 func _ready() -> void:
+	# TODO Clean up inconsistencies between the blocks
 	super()
+	scale = Vector2.ONE
+	sprite.scale = Vector2(0.5, 0.5)
 	health = 5 * Engine.physics_ticks_per_second
 
 func set_team_texture():
 	# Temporarily putting lazer facing in here because it's convenient
 	if team == 1:
-		texture = red_texture
+		sprite.texture = red_texture
 		facing = Vector2i.RIGHT
 	else:
-		texture = blue_texture
+		sprite.texture = blue_texture
 		facing = Vector2i.LEFT
 
 func interact(player: Player) -> void:
