@@ -1,6 +1,8 @@
 class_name Generator
 extends Block
 
+#TODO Fix dangling reference when target dies
+
 # Saved State
 var charge: int = 0
 var target = null
@@ -38,7 +40,6 @@ func _save_state() -> Dictionary:
 	var state: Dictionary = {}
 	save_block_state(state)
 	if target:
-		#TODO Fix dangling reference when target dies
 		state["target"] = target.get_path()
 	else:
 		state["target"] = null

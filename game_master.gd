@@ -5,6 +5,7 @@ var grid: Grid = preload("res://Grid/Grid.tres")
 @export var level: Level
 
 #TODO spawn pre-placed blocks on sync_started signal or else they can't be despawned
+#TODO remove base code from the gamemaster, it's kinda weird for it to be here
 
 var lazers: Array[Lazer]
 var generators: Array[Generator]
@@ -12,7 +13,7 @@ var allowed_move: Dictionary
 var desired_moves: Dictionary
 var desired_interacts: Dictionary
 var block_map: Dictionary
-#TODO remove this from the gamemaster, it's kinda weird for it to be here
+
 var base_healthbars: Dictionary = {1: 30 * Engine.physics_ticks_per_second, 2: 30 * Engine.physics_ticks_per_second }
 var base_banks: Dictionary = {1: 0, 2: 0}
 
