@@ -1,22 +1,23 @@
 class_name Player
 extends Sprite2D
 
-var grid: Grid = preload("res://Grid.tres")
-
-var game_master: GameMaster
-
-var desired_pos: Vector2i
-
 @export var team: int = 1
 
+# Unsaved state
+var grid: Grid = preload("res://Grid.tres")
+var game_master: GameMaster
+var desired_pos: Vector2i
+
 # Saved state
+# position is saved as well
 var facing: Vector2i
-var held_block: Block
 var tile_pos: Vector2i
 var prev_tile_pos: Vector2i
+var held_block: Block
 var ticks_to_move: int
 var state: STATES = STATES.STATIONARY
 
+# Constants
 # Ticks to move one tile
 const MOVE_TICKS = 9
 
@@ -29,6 +30,7 @@ enum STATES {
 	MOVING,
 }
 
+#region Input Handling
 func _predict_remote_input(previous_input: Dictionary, _ticks_since_real_input: int) -> Dictionary:
 	if previous_input.is_empty():
 		return {}
@@ -47,6 +49,7 @@ func _get_local_input() -> Dictionary:
 		move_vector = Vector2i.DOWN
 	elif Input.is_action_pressed("player1_up"):
 		move_vector = Vector2i.UP
+
 	var turn_vector: Vector2i = Vector2i.ZERO
 	if Input.is_action_just_pressed("player1_turnup"):
 		turn_vector = Vector2i.UP
@@ -56,6 +59,7 @@ func _get_local_input() -> Dictionary:
 		turn_vector = Vector2i.LEFT
 	elif Input.is_action_just_pressed("player1_turnright"):
 		turn_vector = Vector2i.RIGHT
+
 	var action: bool = false
 	if turn_vector != Vector2i.ZERO:
 		action = true
@@ -64,7 +68,9 @@ func _get_local_input() -> Dictionary:
 		"turn_vector": turn_vector,
 		"action": action
 	}
+#endregion
 
+#region Network Process
 func _network_preprocess(input: Dictionary) -> void:
 	if input.is_empty():
 		input = {"move_vector": Vector2i.ZERO, "turn_vector": Vector2i.ZERO, "action": false}
@@ -94,17 +100,18 @@ func _network_postprocess(_input: Dictionary) -> void:
 			position = calculate_intermediate_position()
 			if ticks_to_move <= 0:
 				end_move()
+#endregion
 
-func _interpolate_state(old_state: Dictionary, new_state: Dictionary, weight: float) -> void:
-	position = lerp(old_state["position"], new_state["position"], weight)
-
+#region Private functions
 func calculate_intermediate_position() -> Vector2:
 	var prev_map_pos = grid.grid_to_map(prev_tile_pos)
 	var direction = tile_pos - prev_tile_pos
 	var ticks_elapsed = MOVE_TICKS - ticks_to_move
 	var remainder_pixels = min(REMAINDER_PIXELS, ticks_elapsed)
 	return prev_map_pos + direction * ticks_elapsed * PIXELS_PER_TICK + direction * remainder_pixels
+#endregion
 
+#region Public functions
 func end_move() -> void:
 	state = STATES.STATIONARY
 	prev_tile_pos = tile_pos
@@ -116,7 +123,9 @@ func start_move(target: Vector2i) -> void:
 	tile_pos = target
 	state = STATES.MOVING
 	ticks_to_move = MOVE_TICKS
+#endregion
 
+#region Save and Load state
 func _save_state() -> Dictionary:
 	var block_path
 	if held_block:
@@ -146,3 +155,4 @@ func _load_state(loaded_state: Dictionary) -> void:
 		held_block = get_node(loaded_state["held_block"])
 	if held_block:
 		held_block.position = grid.grid_to_map(tile_pos + facing)
+#endregion

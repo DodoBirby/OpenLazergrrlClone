@@ -29,7 +29,6 @@ func _process(_delta: float) -> void:
 	player2bank.text = str(base_banks[2])
 
 func _ready() -> void:
-	SyncManager.scene_spawned.connect(_on_scene_spawned)
 	for child in get_children():
 		if child is Player:
 			child.game_master = self
@@ -224,8 +223,3 @@ func _load_state(state: Dictionary) -> void:
 	for gen in state["generators"]:
 		generators.append(get_node(gen))
 	
-func _on_scene_spawned(node_name: String, spawned_node: Node, _scene: PackedScene, data: Dictionary):
-	if node_name == "shop_product":
-		spawned_node.game_master = self
-		spawned_node.team = data["team"]
-		spawned_node.set_team_texture()
