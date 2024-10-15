@@ -1,7 +1,7 @@
 class_name GameMaster
 extends Node
 
-var grid: Grid = preload("res://Grid.tres")
+var grid: Grid = preload("res://Grid/Grid.tres")
 @export var level: Level
 
 #TODO spawn pre-placed blocks on sync_started signal or else they can't be despawned

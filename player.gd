@@ -4,7 +4,7 @@ extends Sprite2D
 @export var team: int = 1
 
 # Unsaved state
-var grid: Grid = preload("res://Grid.tres")
+var grid: Grid = preload("res://Grid/Grid.tres")
 var game_master: GameMaster
 var desired_pos: Vector2i
 

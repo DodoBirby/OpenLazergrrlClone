@@ -1,0 +1,7 @@
+[gd_scene load_steps=3 format=3 uid="uid://b68p0dtp6gx8t"]
+
+[ext_resource type="Script" path="res://Blocks/wall.gd" id="1_765ea"]
+[ext_resource type="PackedScene" uid="uid://0rjtrn5awaon" path="res://Blocks/block.tscn" id="1_vd8l8"]
+
+[node name="Wall" instance=ExtResource("1_vd8l8")]
+script = ExtResource("1_765ea")

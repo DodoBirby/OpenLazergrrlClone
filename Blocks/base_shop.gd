@@ -1,14 +1,13 @@
 class_name BaseShop
 extends Block
 
-@onready var sprite: Sprite2D = %Sprite
 @export var product: PackedScene
-@export var texture: Texture2D
 
-func _ready() -> void:
-	sprite.texture = texture
+func _network_spawn(_data: Dictionary) -> void:
+	super(_data)
 	SyncManager.scene_spawned.connect(_on_scene_spawned)
 
+#region Virtual Block Functions
 func interact(player: Player) -> void:
 	if player.team != team:
 		return
@@ -16,13 +15,12 @@ func interact(player: Player) -> void:
 		SyncManager.despawn(player.held_block)
 		player.held_block = null
 	else:
-		player.held_block = SyncManager.spawn("shop_product", get_parent(), product, { "team": team })
+		player.held_block = SyncManager.spawn("shop_product", game_master, product, { "team": team })
 
 func damage() -> void:
 	game_master.deal_base_damage(team)
+#endregion
 	
-func _on_scene_spawned(node_name: String, spawned_node: Node, _scene: PackedScene, data: Dictionary):
+func _on_scene_spawned(node_name: String, spawned_node: Node, _scene: PackedScene, _data: Dictionary):
 	if node_name == "shop_product":
 		spawned_node.game_master = game_master
-		spawned_node.team = data["team"]
-		spawned_node.set_team_texture()

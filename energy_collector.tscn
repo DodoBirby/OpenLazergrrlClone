@@ -1,8 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://b5v6booiosr5c"]
-
-[ext_resource type="Script" path="res://energy_collector.gd" id="1_jgh2j"]
-
-[node name="EnergyCollector" type="Node2D" groups=["network_sync"]]
-script = ExtResource("1_jgh2j")
-
-[node name="Sprite" type="Sprite2D" parent="."]

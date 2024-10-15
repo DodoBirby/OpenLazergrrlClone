@@ -1,8 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://dk87gmfst21d1"]
-
-[ext_resource type="Script" path="res://generator.gd" id="1_c4s52"]
-
-[node name="Generator" type="Node2D" groups=["network_sync"]]
-script = ExtResource("1_c4s52")
-
-[node name="Sprite" type="Sprite2D" parent="."]

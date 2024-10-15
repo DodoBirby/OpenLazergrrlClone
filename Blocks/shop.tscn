@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://gk0dkjckgdht"]
+
+[ext_resource type="PackedScene" uid="uid://0rjtrn5awaon" path="res://Blocks/block.tscn" id="1_mat2t"]
+[ext_resource type="Script" path="res://Blocks/shop.gd" id="1_u7kog"]
+
+[node name="Shop" instance=ExtResource("1_mat2t")]
+script = ExtResource("1_u7kog")
+product = null
