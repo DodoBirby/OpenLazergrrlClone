@@ -7,15 +7,18 @@ var grid: Grid = preload("res://Grid/Grid.tres")
 #TODO remove base code from the gamemaster, it's kinda weird for it to be here
 #TODO ensure postprocess has no dependent actions
 
+# Saved State
 var lazers: Array[Lazer]
 var generators: Array[Generator]
+var block_map: Dictionary
+var base_healthbars: Dictionary = {1: 30 * Engine.physics_ticks_per_second, 2: 30 * Engine.physics_ticks_per_second }
+var base_banks: Dictionary = {1: 0, 2: 0}
+
+# Unsaved State
+# Temporary Values, only last for a single frame
 var allowed_move: Dictionary
 var desired_moves: Dictionary
 var desired_interacts: Dictionary
-var block_map: Dictionary
-
-var base_healthbars: Dictionary = {1: 30 * Engine.physics_ticks_per_second, 2: 30 * Engine.physics_ticks_per_second }
-var base_banks: Dictionary = {1: 0, 2: 0}
 
 # This doesn't have to go into state because it's constant throughout a match
 var collectors: Array[EnergyCollector]
@@ -79,6 +82,7 @@ func _network_process(_input: Dictionary) -> void:
 		for gen in found_gens:
 			gen.target = collector
 
+#region Private Functions
 func lazer_shoot(lazer: Lazer):
 	var team = lazer.team
 	var facing = lazer.facing
@@ -151,7 +155,9 @@ func can_place(pos: Vector2i) -> bool:
 		if player.tile_pos == pos:
 			return false
 	return true
+#endregion
 
+#region Public Functions
 func register_block(block: Block, pos: Vector2i) -> void:
 	block_map[pos] = block
 	block.game_master = self
@@ -198,7 +204,9 @@ func deal_base_damage(team: int):
 	
 func add_to_bank(team: int, amount: int):
 	base_banks[team] += amount
+#endregion
 
+#region Save and Load State
 func _save_state() -> Dictionary:
 	var save_state: Dictionary = {"blocks": {}, "lazers": [], "generators": [], "base_healthbars": {}, "base_banks": {} }
 	for pos in block_map:
@@ -224,3 +232,4 @@ func _load_state(state: Dictionary) -> void:
 	for gen in state["generators"]:
 		generators.append(get_node(gen))
 	
+#endregion
