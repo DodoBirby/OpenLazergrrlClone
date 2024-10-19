@@ -1,0 +1,11 @@
+[gd_scene load_steps=5 format=3 uid="uid://yfa468vj1w3q"]
+
+[ext_resource type="PackedScene" uid="uid://cunrmt4fkayc1" path="res://Blocks/BaseShop/base_shop.tscn" id="1_n2fss"]
+[ext_resource type="PackedScene" uid="uid://chl4fwqtwuop5" path="res://Blocks/lazer.tscn" id="2_q3rbn"]
+[ext_resource type="Texture2D" uid="uid://dsje0q25cyw1r" path="res://Assets/Red/Lazer_Shop_-_Red_64x64.png" id="3_ka4vx"]
+[ext_resource type="Texture2D" uid="uid://byf3nib8h8fpl" path="res://Assets/Blue/Lazer_Shop_-_Blue_64x64.png" id="4_mv5kf"]
+
+[node name="BaseLazerShop" instance=ExtResource("1_n2fss")]
+product = ExtResource("2_q3rbn")
+red_team_texture = ExtResource("3_ka4vx")
+blue_team_texture = ExtResource("4_mv5kf")

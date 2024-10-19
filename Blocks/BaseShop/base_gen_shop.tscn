@@ -1,0 +1,11 @@
+[gd_scene load_steps=5 format=3 uid="uid://dxeu6p5eqjtgt"]
+
+[ext_resource type="PackedScene" uid="uid://cunrmt4fkayc1" path="res://Blocks/BaseShop/base_shop.tscn" id="1_6gxj8"]
+[ext_resource type="PackedScene" uid="uid://dk87gmfst21d1" path="res://Blocks/generator.tscn" id="2_2dflg"]
+[ext_resource type="Texture2D" uid="uid://bydt4nbqdjf8f" path="res://Assets/Red/Generator_Shop_-_Red_64x64.png" id="3_te3vh"]
+[ext_resource type="Texture2D" uid="uid://db1sse1p63uin" path="res://Assets/Blue/Generator_Shop_-_Blue_64x64.png" id="4_i5o8v"]
+
+[node name="BaseGenShop" instance=ExtResource("1_6gxj8")]
+product = ExtResource("2_2dflg")
+red_team_texture = ExtResource("3_te3vh")
+blue_team_texture = ExtResource("4_i5o8v")

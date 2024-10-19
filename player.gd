@@ -1,7 +1,7 @@
 class_name Player
 extends Sprite2D
 
-@export var team: int = 1
+@export var team: Constants.Teams = Constants.Teams.RED
 
 # Unsaved state
 var grid: Grid = preload("res://Grid/Grid.tres")

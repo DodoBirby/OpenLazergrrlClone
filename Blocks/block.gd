@@ -11,7 +11,7 @@ var grid: Grid = preload("res://Grid/Grid.tres")
 var game_master: GameMaster
 
 # Initialized state
-var team: int = 0
+var team: Constants.Teams = Constants.Teams.RED
 
 # Saved state
 var health: int = 1
@@ -24,7 +24,7 @@ func _network_spawn(data: Dictionary) -> void:
 	team = data["team"]
 	sprite.scale.x = 0.5
 	sprite.scale.y = 0.5
-	sprite.texture = red_team_texture if team == 1 else blue_team_texture
+	sprite.texture = red_team_texture if team == Constants.Teams.RED else blue_team_texture
 
 #region Virtual Block Methods
 # Called when the player uses action while targeting this block on the field

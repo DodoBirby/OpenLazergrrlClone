@@ -1,11 +1,9 @@
-[gd_scene load_steps=12 format=4 uid="uid://cf8oiwjc05gon"]
+[gd_scene load_steps=10 format=4 uid="uid://cf8oiwjc05gon"]
 
 [ext_resource type="PackedScene" uid="uid://0g1i3mj8c0cy" path="res://Levels/level.tscn" id="1_ixk5j"]
-[ext_resource type="PackedScene" uid="uid://cunrmt4fkayc1" path="res://Blocks/base_shop.tscn" id="2_l01mi"]
-[ext_resource type="PackedScene" uid="uid://dk87gmfst21d1" path="res://Blocks/generator.tscn" id="3_0g1f0"]
+[ext_resource type="PackedScene" uid="uid://bpivb27cy2baf" path="res://Levels/preplaced_block.tscn" id="2_yu7g3"]
+[ext_resource type="Texture2D" uid="uid://0blk4u84ja7o" path="res://Assets/Red/Wall_-_Red_64x64.png" id="3_eojpu"]
 [ext_resource type="Texture2D" uid="uid://bydt4nbqdjf8f" path="res://Assets/Red/Generator_Shop_-_Red_64x64.png" id="3_yhf4s"]
-[ext_resource type="PackedScene" uid="uid://b68p0dtp6gx8t" path="res://Blocks/wall.tscn" id="4_ewa2h"]
-[ext_resource type="PackedScene" uid="uid://chl4fwqtwuop5" path="res://Blocks/lazer.tscn" id="5_dsuc5"]
 [ext_resource type="Texture2D" uid="uid://ddopkjfbo0kpx" path="res://Assets/Red/Wall_Shop_-_Red_64x64.png" id="5_uk3he"]
 [ext_resource type="Texture2D" uid="uid://dsje0q25cyw1r" path="res://Assets/Red/Lazer_Shop_-_Red_64x64.png" id="7_tyaiw"]
 [ext_resource type="Texture2D" uid="uid://db1sse1p63uin" path="res://Assets/Blue/Generator_Shop_-_Blue_64x64.png" id="9_qe83u"]
@@ -22,58 +20,61 @@ tile_map_data = PackedByteArray("AAADAAMAAAAAAAAAAAADAAkAAAAAAAAAAAANAAkAAAAAAAA
 
 [node name="ClientPlayer" parent="GameMaster" index="0"]
 position = Vector2(928, 416)
+team = 2
 
 [node name="ServerPlayer" parent="GameMaster" index="1"]
 position = Vector2(160, 416)
 
-[node name="BaseShop" parent="GameMaster" index="2" instance=ExtResource("2_l01mi")]
+[node name="PreplacedBlock" parent="GameMaster" index="2" instance=ExtResource("2_yu7g3")]
+position = Vector2(224, 96)
+scale = Vector2(1, 1)
+texture = ExtResource("3_eojpu")
+team = 1
+
+[node name="PreplacedBlock5" parent="GameMaster" index="3" instance=ExtResource("2_yu7g3")]
 position = Vector2(32, 352)
-product = ExtResource("3_0g1f0")
+scale = Vector2(1, 1)
 texture = ExtResource("3_yhf4s")
 team = 1
+type = 3
 
-[node name="BaseShop2" parent="GameMaster" index="3" instance=ExtResource("2_l01mi")]
+[node name="PreplacedBlock6" parent="GameMaster" index="4" instance=ExtResource("2_yu7g3")]
 position = Vector2(32, 416)
-product = ExtResource("4_ewa2h")
+scale = Vector2(1, 1)
 texture = ExtResource("5_uk3he")
 team = 1
+type = 4
 
-[node name="BaseShop3" parent="GameMaster" index="4" instance=ExtResource("2_l01mi")]
+[node name="PreplacedBlock7" parent="GameMaster" index="5" instance=ExtResource("2_yu7g3")]
 position = Vector2(32, 480)
-product = ExtResource("5_dsuc5")
+scale = Vector2(1, 1)
 texture = ExtResource("7_tyaiw")
 team = 1
+type = 5
 
-[node name="BaseShop4" parent="GameMaster" index="5" instance=ExtResource("2_l01mi")]
+[node name="PreplacedBlock8" parent="GameMaster" index="6" instance=ExtResource("2_yu7g3")]
 position = Vector2(1056, 352)
-product = ExtResource("3_0g1f0")
 texture = ExtResource("9_qe83u")
-team = 2
+type = 3
 
-[node name="BaseShop5" parent="GameMaster" index="6" instance=ExtResource("2_l01mi")]
+[node name="PreplacedBlock9" parent="GameMaster" index="7" instance=ExtResource("2_yu7g3")]
 position = Vector2(1056, 416)
-product = ExtResource("4_ewa2h")
 texture = ExtResource("10_y057k")
-team = 2
+type = 4
 
-[node name="BaseShop6" parent="GameMaster" index="7" instance=ExtResource("2_l01mi")]
+[node name="PreplacedBlock10" parent="GameMaster" index="8" instance=ExtResource("2_yu7g3")]
 position = Vector2(1056, 480)
-product = ExtResource("5_dsuc5")
 texture = ExtResource("11_1dajd")
-team = 2
+type = 5
 
-[node name="Wall" parent="GameMaster" index="8" instance=ExtResource("4_ewa2h")]
-position = Vector2(224, 96)
-team = 1
-
-[node name="Wall2" parent="GameMaster" index="9" instance=ExtResource("4_ewa2h")]
+[node name="PreplacedBlock2" parent="GameMaster" index="9" instance=ExtResource("2_yu7g3")]
 position = Vector2(224, 736)
+scale = Vector2(1, 1)
+texture = ExtResource("3_eojpu")
 team = 1
 
-[node name="Wall3" parent="GameMaster" index="10" instance=ExtResource("4_ewa2h")]
-position = Vector2(864, 736)
-team = 2
-
-[node name="Wall4" parent="GameMaster" index="11" instance=ExtResource("4_ewa2h")]
+[node name="PreplacedBlock3" parent="GameMaster" index="10" instance=ExtResource("2_yu7g3")]
 position = Vector2(864, 96)
-team = 2
+
+[node name="PreplacedBlock4" parent="GameMaster" index="11" instance=ExtResource("2_yu7g3")]
+position = Vector2(864, 736)
