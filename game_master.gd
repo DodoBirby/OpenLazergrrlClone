@@ -4,8 +4,8 @@ extends Node
 var grid: Grid = preload("res://Grid/Grid.tres")
 @export var level: Level
 
-#TODO spawn pre-placed blocks on sync_started signal or else they can't be despawned
 #TODO remove base code from the gamemaster, it's kinda weird for it to be here
+#TODO ensure postprocess has no dependent actions
 
 var lazers: Array[Lazer]
 var generators: Array[Generator]

@@ -1,11 +1,16 @@
 class_name Generator
 extends Block
 
-#TODO Fix dangling reference when target dies
-
 # Saved State
 var charge: int = 0
-var target = null
+var target = null:
+	set(new_target):
+		if target != new_target:
+			if target != null:
+				target.destroyed.disconnect(_on_target_destroyed)
+			if new_target != null:
+				new_target.destroyed.connect(_on_target_destroyed)
+			target = new_target
 
 # Psuedo Constant
 var MAX_CHARGE: int = int(2.5 * Engine.physics_ticks_per_second)
@@ -54,3 +59,6 @@ func _load_state(state: Dictionary) -> void:
 	else:
 		target = get_node(state["target"])
 #endregion
+
+func _on_target_destroyed() -> void:
+	target = null

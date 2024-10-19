@@ -18,6 +18,8 @@ var health: int = 1
 var tile_pos: Vector2i
 var active: bool = false
 
+signal destroyed
+
 # data.keys = ["team"]
 func _network_spawn(data: Dictionary) -> void:
 	add_to_group("network_sync")
@@ -48,6 +50,7 @@ func get_connection_directions() -> Array[Vector2i]:
 func _network_postprocess(_input: Dictionary) -> void:
 	adjust_size()
 	if health <= 0:
+		destroyed.emit()
 		game_master.deregister_block(tile_pos)
 		SyncManager.despawn(self)
 
