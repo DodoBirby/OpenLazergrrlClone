@@ -9,3 +9,6 @@
 product = ExtResource("2_q77en")
 red_team_texture = ExtResource("3_6xy84")
 blue_team_texture = ExtResource("4_1fd87")
+
+[node name="Sprite" parent="." index="0"]
+material = null

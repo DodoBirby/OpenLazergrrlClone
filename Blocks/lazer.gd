@@ -1,6 +1,8 @@
 class_name Lazer
 extends Block
 
+@onready var damage_particles: CPUParticles2D = %DamageParticles
+
 # Saved State
 var charge: int = 0
 var facing: Vector2i = Vector2i.RIGHT
@@ -15,10 +17,16 @@ var target_pos: Vector2i = Vector2i.MIN:
 
 func _draw() -> void:
 	if target_pos == Vector2i.MIN:
+		damage_particles.emitting = false
+		damage_particles.visible = false
 		return
 	var start_pos = facing * grid.HALF_SIZE
 	var end_pos = target_pos - Vector2i(position)
 	var color = Color(1, 0, 0) if team == Constants.Teams.RED else Color(0, 0, 1)
+	damage_particles.position = end_pos
+	damage_particles.direction = -facing
+	damage_particles.emitting = true
+	damage_particles.visible = true
 	draw_line(start_pos, end_pos, color, 16)
 
 func _network_spawn(data: Dictionary) -> void:
@@ -27,7 +35,8 @@ func _network_spawn(data: Dictionary) -> void:
 		facing = Vector2i.RIGHT
 	else:
 		facing = Vector2i.LEFT
-	health = 5 * Engine.physics_ticks_per_second
+	MAX_HEALTH = 5 * Engine.physics_ticks_per_second
+	health = MAX_HEALTH
 
 #region Virtual Block Functions
 func interact(player: Player) -> void:

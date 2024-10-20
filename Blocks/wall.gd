@@ -3,7 +3,8 @@ extends Block
 
 func _network_spawn(_data: Dictionary) -> void:
 	super(_data)
-	health = 10 * Engine.physics_ticks_per_second
+	MAX_HEALTH = 10 * Engine.physics_ticks_per_second
+	health = MAX_HEALTH
 
 #region Virtual Block Functions
 func interact(player: Player) -> void:

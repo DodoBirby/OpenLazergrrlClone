@@ -9,6 +9,7 @@ extends Node2D
 # Unsaved state
 var grid: Grid = preload("res://Grid/Grid.tres")
 var game_master: GameMaster
+var MAX_HEALTH: int = 1
 
 # Initialized state
 var team: Constants.Teams = Constants.Teams.RED
@@ -50,7 +51,7 @@ func get_connection_directions() -> Array[Vector2i]:
 func should_destroy() -> bool:
 	return health <= 0
 
-# Called byt the game master when this block's should_destroy() function returns true
+# Called by the game master when this block's should_destroy() function returns true
 # Note this function is called in a loop over the block map keys so this shouldn't
 # have side effects that affect other blocks
 func destroy():
@@ -60,11 +61,8 @@ func destroy():
 #endregion
 
 func _network_postprocess(_input: Dictionary) -> void:
-	adjust_size()
-
-
-#region Private Functions
-func adjust_size():
+	if sprite.material:
+		sprite.material.set_shader_parameter("percent_health", float(health) / MAX_HEALTH)
 	if active:
 		sprite.scale.x = 1
 		sprite.scale.y = 1
@@ -74,7 +72,6 @@ func adjust_size():
 		sprite.scale.y = 0.5
 	if team == 2:
 		sprite.scale.x = -sprite.scale.x
-#endregion
 
 #region Save and Load State
 # Call in child classes to save the block specific state

@@ -10,7 +10,8 @@ var MAX_CHARGE: int = int(2.5 * Engine.physics_ticks_per_second)
 
 func _network_spawn(_data: Dictionary) -> void:
 	super(_data)
-	health = 5 * Engine.physics_ticks_per_second
+	MAX_HEALTH = 5 * Engine.physics_ticks_per_second
+	health = MAX_HEALTH
 	SyncManager.scene_despawned.connect(_on_scene_despawned)
 
 #region Virtual Block Functions
@@ -31,7 +32,7 @@ func _network_postprocess(_input: Dictionary) -> void:
 		return
 	charge += 1
 	# Block destruction has already happened so we know target is valid and alive
-	if charge >= MAX_CHARGE and target:
+	if charge >= MAX_CHARGE and target and target.active:
 		target.power_up()
 		charge = 0
 
