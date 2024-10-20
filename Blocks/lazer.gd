@@ -17,8 +17,8 @@ func _draw() -> void:
 	if target_pos == Vector2i.MIN:
 		return
 	var start_pos = facing * grid.HALF_SIZE
-	var end_pos = grid.grid_to_map(target_pos) - facing * grid.HALF_SIZE - Vector2i(position)
-	var color = Color(1, 0, 0) if team == 1 else Color(0, 0, 1)
+	var end_pos = target_pos - Vector2i(position)
+	var color = Color(1, 0, 0) if team == Constants.Teams.RED else Color(0, 0, 1)
 	draw_line(start_pos, end_pos, color, 16)
 
 func _network_spawn(data: Dictionary) -> void:
@@ -48,14 +48,45 @@ func get_connection_directions() -> Array[Vector2i]:
 	return all_directions
 #endregion
 
+#region Public Functions
 # Generator calls this when it sends power to us
 func power_up() -> void:
 	charge = MAX_CHARGE
 
-func _network_postprocess(_input: Dictionary) -> void:
-	super(_input)
-	if charge > 0:
-		charge -= 1
+# Game master calls this during the shooting step
+func shoot() -> void:
+	if charge <= 0:
+		target_pos = Vector2i.MIN
+		return
+	charge -= 1
+	var starting_pos = tile_pos + facing
+	var current_pos = starting_pos
+	while game_master.lazer_can_pass(current_pos):
+		current_pos += facing
+	var target = game_master.get_block_at_pos(current_pos)
+	target_pos = calculate_collision_point(current_pos)
+	if not target or target.team == team:
+		return
+	if target is Lazer and lazer_should_collide(target):
+		target_pos = calculate_lazer_collision_point(current_pos)
+		return
+	target.damage()
+#endregion
+
+#region Private Functions
+func calculate_lazer_collision_point(other_lazer_tile_pos: Vector2i) -> Vector2i:
+	return lerp(Vector2(calculate_nose_point()), Vector2(calculate_collision_point(other_lazer_tile_pos)), 0.5)
+
+func calculate_collision_point(collision_tile_pos: Vector2i) -> Vector2i:
+	var map_pos = grid.grid_to_map(collision_tile_pos)
+	return map_pos + grid.HALF_SIZE * -facing
+	
+func calculate_nose_point() -> Vector2i:
+	return grid.grid_to_map(tile_pos) + grid.HALF_SIZE * facing
+
+func lazer_should_collide(lazer: Lazer) -> bool:
+	return lazer.facing == -facing and lazer.charge > 0
+#endregion
 
 #region Save and Load State
 func _save_state() -> Dictionary:

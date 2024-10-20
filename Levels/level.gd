@@ -9,6 +9,11 @@ extends Node
 
 func _ready() -> void:
 	server_player.set_multiplayer_authority(1)
+	fit_camera_to_map()
+	game_master.player1bank = %Player1Bank
+	game_master.player2bank = %Player2Bank
+
+func fit_camera_to_map() -> void:
 	var used_rect = floor_tiles.get_used_rect()
 	used_rect.position *= 64
 	used_rect.size *= 64
@@ -18,8 +23,6 @@ func _ready() -> void:
 	camera.position = used_rect.get_center()
 	var zoom = min(zoom_x, zoom_y)
 	camera.zoom = Vector2(zoom, zoom)
-	game_master.player1bank = %Player1Bank
-	game_master.player2bank = %Player2Bank
 
 func reactor_at_tile_pos(pos: Vector2i) -> bool:
 	return foreground.get_cell_source_id(pos) != -1

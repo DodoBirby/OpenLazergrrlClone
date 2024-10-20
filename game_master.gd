@@ -44,8 +44,12 @@ func _ready() -> void:
 			child.game_master = self
 			register_block(child, grid.map_to_grid(child.position))
 			child.position = grid.grid_to_map(child.tile_pos)
-			child.set_team_texture()
 
+# Anything that needs to happen in a strict order should be managed by the game master in this function
+# network_processes in other classes should either be network_preprocess or network_postprocess
+# so that they explicitly occur before or after this function
+# also preprocess and postprocess functions should only contain things that are either purely visual
+# or will always happen regardless of any intervening events
 func _network_process(_input: Dictionary) -> void:
 	for player in players:
 		if allowed_move[player] and desired_moves[player.desired_pos] == 1:
@@ -64,7 +68,7 @@ func _network_process(_input: Dictionary) -> void:
 		generator.target = null
 
 	for lazer in lazers:
-		var found_gens = find_closest_generators(lazer)
+		var found_gens = find_generators(lazer, true)
 		if found_gens.size() == 0:
 			continue
 		# Oldest gen placed breaks ties if there are two equally close generators
@@ -73,53 +77,28 @@ func _network_process(_input: Dictionary) -> void:
 				generator.target = lazer
 				break
 	for lazer in lazers:
-		if lazer.charge > 0:
-			lazer_shoot(lazer)
-		else:
-			lazer.target_pos = Vector2i.MIN
+		lazer.shoot()
 	for collector in collectors:
-		var found_gens = find_all_generators(collector)
+		var found_gens = find_generators(collector, false)
 		for gen in found_gens:
 			gen.target = collector
-
+	# Iterate over the .keys() because entries can get removed here
+	for pos in block_map.keys():
+		if block_map[pos].should_destroy():
+			block_map[pos].destroy()
+	
+	
 #region Private Functions
-func lazer_shoot(lazer: Lazer):
-	var team = lazer.team
-	var facing = lazer.facing
-	var starting_pos = lazer.tile_pos + facing
-	var current_pos = starting_pos
-	while not block_map.has(current_pos) and level.tile_has_floor(current_pos) and not has_player(current_pos):
-		current_pos += facing
-	lazer.target_pos = current_pos
-	if block_map.has(current_pos) and block_map[current_pos].team != team:
-		block_map[current_pos].damage()
-
 func has_player(pos: Vector2i) -> bool:
 	for player in players:
 		if player.tile_pos == pos:
 			return true
 	return false
 
-func find_all_generators(block: Block) -> Array[Generator]:
+func find_generators(block: Block, stop_at_closest: bool) -> Array[Generator]:
 	var queue = [block.tile_pos]
 	var seen: Dictionary = { block.tile_pos: true }
 	var team = block.team
-	var result: Array[Generator] = []
-	while queue.size() > 0:
-		var pos = queue.pop_front()
-		if block_map[pos] is Generator and block_map[pos].target == null:
-			result.append(block_map[pos])
-		var neighbours = find_connecting_blocks(pos, team)
-		for neighbour in neighbours:
-			if not seen.has(neighbour.tile_pos):
-				seen[neighbour.tile_pos] = true
-				queue.append(neighbour.tile_pos)
-	return result
-
-func find_closest_generators(lazer: Lazer) -> Array[Generator]:
-	var queue = [lazer.tile_pos]
-	var seen: Dictionary = { lazer.tile_pos: true }
-	var team = lazer.team
 	var found_generator = false
 	var result: Array[Generator] = []
 	while queue.size() > 0:
@@ -127,7 +106,7 @@ func find_closest_generators(lazer: Lazer) -> Array[Generator]:
 		if block_map[pos] is Generator and block_map[pos].target == null:
 			found_generator = true
 			result.append(block_map[pos])
-		if found_generator:
+		if found_generator and stop_at_closest:
 			continue
 		var neighbours = find_connecting_blocks(pos, team)
 		for neighbour in neighbours:
@@ -151,13 +130,20 @@ func can_place(pos: Vector2i) -> bool:
 	if not level.tile_has_floor(pos):
 		return false
 	# We already know the tile is empty of blocks because of where this is called
-	for player in players:
-		if player.tile_pos == pos:
-			return false
-	return true
+	# So we just have to check for players
+	return not has_player(pos)
 #endregion
 
 #region Public Functions
+func tile_occupied(pos: Vector2i) -> bool:
+	return has_player(pos) or block_map.has(pos)
+
+func lazer_can_pass(pos: Vector2i) -> bool:
+	return not tile_occupied(pos) and level.tile_has_floor(pos)
+
+func get_block_at_pos(pos: Vector2i):
+	return block_map.get(pos)
+
 func register_block(block: Block, pos: Vector2i) -> void:
 	block_map[pos] = block
 	block.game_master = self

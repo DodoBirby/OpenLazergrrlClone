@@ -45,14 +45,23 @@ func damage():
 # on the neighbouring block for the connection to be made
 func get_connection_directions() -> Array[Vector2i]:
 	return [Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT]
+
+# Called by the game master to decide if this block should be destroyed
+func should_destroy() -> bool:
+	return health <= 0
+
+# Called byt the game master when this block's should_destroy() function returns true
+# Note this function is called in a loop over the block map keys so this shouldn't
+# have side effects that affect other blocks
+func destroy():
+	destroyed.emit()
+	game_master.deregister_block(tile_pos)
+	SyncManager.despawn(self)
 #endregion
 
 func _network_postprocess(_input: Dictionary) -> void:
 	adjust_size()
-	if health <= 0:
-		destroyed.emit()
-		game_master.deregister_block(tile_pos)
-		SyncManager.despawn(self)
+
 
 #region Private Functions
 func adjust_size():

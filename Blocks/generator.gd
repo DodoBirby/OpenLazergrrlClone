@@ -3,14 +3,7 @@ extends Block
 
 # Saved State
 var charge: int = 0
-var target = null:
-	set(new_target):
-		if target != new_target:
-			if target != null:
-				target.destroyed.disconnect(_on_target_destroyed)
-			if new_target != null:
-				new_target.destroyed.connect(_on_target_destroyed)
-			target = new_target
+var target = null
 
 # Psuedo Constant
 var MAX_CHARGE: int = int(2.5 * Engine.physics_ticks_per_second)
@@ -18,6 +11,7 @@ var MAX_CHARGE: int = int(2.5 * Engine.physics_ticks_per_second)
 func _network_spawn(_data: Dictionary) -> void:
 	super(_data)
 	health = 5 * Engine.physics_ticks_per_second
+	SyncManager.scene_despawned.connect(_on_scene_despawned)
 
 #region Virtual Block Functions
 func interact(player: Player) -> void:
@@ -36,6 +30,7 @@ func _network_postprocess(_input: Dictionary) -> void:
 	if !active:
 		return
 	charge += 1
+	# Block destruction has already happened so we know target is valid and alive
 	if charge >= MAX_CHARGE and target:
 		target.power_up()
 		charge = 0
@@ -60,5 +55,6 @@ func _load_state(state: Dictionary) -> void:
 		target = get_node(state["target"])
 #endregion
 
-func _on_target_destroyed() -> void:
-	target = null
+func _on_scene_despawned(_node_name: String, node: Node):
+	if target == node:
+		target = null
