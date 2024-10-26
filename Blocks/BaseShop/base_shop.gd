@@ -17,8 +17,8 @@ func interact(player: Player) -> void:
 	else:
 		player.held_block = SyncManager.spawn("shop_product", game_master, product, { "team": team })
 
-func damage() -> void:
-	game_master.deal_base_damage(team)
+func damage(amount: int) -> void:
+	game_master.deal_base_damage(team, amount)
 #endregion
 	
 func _on_scene_spawned(node_name: String, spawned_node: Node, _scene: PackedScene, _data: Dictionary):

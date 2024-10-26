@@ -69,7 +69,12 @@ func _network_process(_input: Dictionary) -> void:
 	for collector in collectors:
 		collector.fake_gen_targets.clear()
 	for lazer in lazers:
-		request_power(lazer, 1)
+		lazer.requested_energy = false
+	for lazer in lazers:
+		if lazer.requested_energy:
+			continue
+		lazer.requested_energy = true
+		request_power(lazer)
 	for lazer in lazers:
 		lazer.shoot()
 	for collector in collectors:
@@ -89,7 +94,8 @@ func has_player(pos: Vector2i) -> bool:
 			return true
 	return false
 
-func request_power(lazer: Lazer, power_requested: int):
+func request_power(lazer: Lazer):
+	var power_requested = lazer.get_energy_requirement()
 	var found_gens = find_power_sources(lazer, power_requested, true)
 	var base: EnergyCollector = null
 	if found_gens.size() == 0:
@@ -98,7 +104,7 @@ func request_power(lazer: Lazer, power_requested: int):
 		base = found_gens.back()
 	if found_gens.size() < power_requested and not base:
 		return
-	# Oldest gen placed breaks ties if there are two equally close generators
+	# Pick oldest gens first
 	var power_received = 0
 	for generator in generators:
 		if found_gens.has(generator):
@@ -202,8 +208,8 @@ func move_hand_to_field(player: Player, pos: Vector2i) -> void:
 	register_block(block, pos)
 	player.held_block = null
 	
-func deal_base_damage(team: int):
-	base_healthbars[team] -= 1
+func deal_base_damage(team: int, amount: int):
+	base_healthbars[team] -= amount
 	if base_healthbars[team] <= 0:
 		print("%s team loses" % team)
 	

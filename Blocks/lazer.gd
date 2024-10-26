@@ -4,9 +4,13 @@ extends Block
 @onready var damage_particles: CPUParticles2D = %DamageParticles
 
 # Saved State
-var charge: int = 0
+var charge: Array[int] = []
 var facing: Vector2i = Vector2i.RIGHT
-var level: int = 1
+var level: int = 1:
+	set(value):
+		level = value
+		charge.resize(2 * level - 1)
+
 var front_lazer: Lazer = null:
 	set(value):
 		if front_lazer == value:
@@ -16,6 +20,13 @@ var front_lazer: Lazer = null:
 		if value:
 			value.deregistered.connect(_on_front_lazer_deregistered)
 		front_lazer = value
+
+# Unsaved State
+var requested_energy: bool = false:
+	set(value):
+		requested_energy = value
+		if front_lazer:
+			front_lazer.requested_energy = value
 
 # Pseudo Constant
 var MAX_CHARGE: int = 3 * Engine.physics_ticks_per_second
@@ -41,9 +52,12 @@ func _draw() -> void:
 	var color = Color(1, 0, 0) if team == Constants.Teams.RED else Color(0, 0, 1)
 	damage_particles.position = end_pos
 	damage_particles.direction = -facing
+	if damage_particles.amount != 60 * level:
+		damage_particles.amount = 60 * level
+	damage_particles.emission_rect_extents.y = 8 * level
 	damage_particles.emitting = true
 	damage_particles.visible = true
-	draw_line(start_pos, end_pos, color, 16)
+	draw_line(start_pos, end_pos, color, 16 * level)
 
 func _network_spawn(data: Dictionary) -> void:
 	super(data)
@@ -60,8 +74,6 @@ func interact(player: Player) -> void:
 		return
 	if player.held_block:
 		return
-	target_pos = Vector2i.MIN
-	charge = 0
 	game_master.move_block_to_hand(player, self)
 	
 func place(player: Player, pos: Vector2i) -> void:
@@ -83,6 +95,8 @@ func get_connection_directions() -> Array[Vector2i]:
 
 func deregister():
 	deregistered.emit()
+	target_pos = Vector2i.MIN
+	clear_charge()
 	level = 1
 	if front_lazer:
 		front_lazer.level = 1
@@ -90,16 +104,29 @@ func deregister():
 #endregion
 
 #region Public Functions
+func get_energy_requirement() -> int:
+	var effective_level = level
+	if front_lazer:
+		effective_level = front_lazer.level
+	return effective_level * 2 - 1
+
 # Generator calls this when it sends power to us
 func power_up() -> void:
-	charge = MAX_CHARGE
+	if front_lazer:
+		front_lazer.power_up()
+		return
+	var min_index = find_min_charge_index()
+	charge[min_index] = MAX_CHARGE
 
 # Game master calls this during the shooting step
 func shoot() -> void:
-	if charge <= 0:
+	if front_lazer:
 		target_pos = Vector2i.MIN
 		return
-	charge -= 1
+	decrement_charge()
+	if charge_empty():
+		target_pos = Vector2i.MIN
+		return
 	var starting_pos = tile_pos + facing
 	var current_pos = starting_pos
 	while game_master.lazer_can_pass(current_pos):
@@ -108,13 +135,38 @@ func shoot() -> void:
 	target_pos = calculate_collision_point(current_pos)
 	if not target or target.team == team:
 		return
-	if target is Lazer and lazer_should_collide(target):
-		target_pos = calculate_lazer_collision_point(current_pos)
-		return
-	target.damage()
+	if target is Lazer:
+		if lazer_should_collide(target):
+			target_pos = calculate_lazer_collision_point(current_pos)
+			return
+		if should_be_overpowered_by(target):
+			target_pos = calculate_collision_point(tile_pos + facing)
+			return
+	target.damage(level)
 #endregion
 
 #region Private Functions
+func clear_charge() -> void:
+	charge.resize(1)
+	charge[0] = 0
+
+func decrement_charge() -> void:
+	for i in range(charge.size()):
+		charge[i] -= 1
+
+func charge_empty() -> bool:
+	for value in charge:
+		if value <= 0:
+			return true
+	return false
+
+func find_min_charge_index() -> int:
+	var min_index = 0
+	for i in range(1, charge.size()):
+		if charge[i] < charge[min_index]:
+			min_index = i
+	return min_index
+
 func connect_to_lazer_from_back(lazer: Lazer) -> void:
 	front_lazer = lazer
 	lazer.level = 2
@@ -137,7 +189,10 @@ func calculate_nose_point() -> Vector2i:
 	return grid.grid_to_map(tile_pos) + grid.HALF_SIZE * facing
 
 func lazer_should_collide(lazer: Lazer) -> bool:
-	return lazer.facing == -facing and lazer.charge > 0
+	return lazer.facing == -facing and not lazer.charge_empty() and lazer.level == level
+	
+func should_be_overpowered_by(lazer: Lazer) -> bool:
+	return lazer.facing == -facing and not lazer.charge_empty() and lazer.level > level
 #endregion
 
 func _network_postprocess(_input: Dictionary) -> void:
@@ -154,7 +209,7 @@ func _save_state() -> Dictionary:
 	var state: Dictionary = {}
 	save_block_state(state)
 	state["facing"] = facing
-	state["charge"] = charge
+	state["charge"] = charge.duplicate()
 	if front_lazer:
 		state["front_lazer"] = front_lazer.get_path()
 	else:
@@ -164,7 +219,7 @@ func _save_state() -> Dictionary:
 
 func _load_state(state: Dictionary) -> void:
 	load_block_state(state)
-	charge = state["charge"]
+	charge = state["charge"].duplicate()
 	facing = state["facing"]
 	if state["front_lazer"]:
 		front_lazer = get_node(state["front_lazer"])

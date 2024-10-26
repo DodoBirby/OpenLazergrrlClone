@@ -39,8 +39,8 @@ func place(_player: Player, _pos: Vector2i) -> void:
 	pass
 
 # Called when a lazer deals damage to this block
-func damage():
-	health -= 1
+func damage(amount: int):
+	health -= amount
 
 # Returns the directions that this block connects to, there must exist a reverse direction
 # on the neighbouring block for the connection to be made
