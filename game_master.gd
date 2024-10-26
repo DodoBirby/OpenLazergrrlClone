@@ -5,7 +5,6 @@ var grid: Grid = preload("res://Grid/Grid.tres")
 @export var level: Level
 
 #TODO remove base code from the gamemaster, it's kinda weird for it to be here
-#TODO ensure postprocess has no dependent actions
 
 # Saved State
 var lazers: Array[Lazer]
@@ -158,6 +157,9 @@ func can_place(pos: Vector2i) -> bool:
 #endregion
 
 #region Public Functions
+func get_base_health(team: int) -> int:
+	return base_healthbars[team]
+
 func tile_occupied(pos: Vector2i) -> bool:
 	return has_player(pos) or block_map.has(pos)
 

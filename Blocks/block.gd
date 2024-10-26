@@ -66,8 +66,7 @@ func deregister():
 #endregion
 
 func _network_postprocess(_input: Dictionary) -> void:
-	if sprite.material:
-		sprite.material.set_shader_parameter("percent_health", float(health) / MAX_HEALTH)
+	sprite.material.set_shader_parameter("percent_health", float(health) / MAX_HEALTH)
 	if active:
 		sprite.scale.x = 1
 		sprite.scale.y = 1
