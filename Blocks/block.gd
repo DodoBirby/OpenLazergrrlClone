@@ -12,7 +12,7 @@ var game_master: GameMaster
 var MAX_HEALTH: int = 1
 
 # Initialized state
-var team: Constants.Teams = Constants.Teams.RED
+@export var team: Constants.Teams = Constants.Teams.RED
 
 # Saved state
 var health: int = 1

@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=4 uid="uid://cf8oiwjc05gon"]
+[gd_scene load_steps=15 format=4 uid="uid://cf8oiwjc05gon"]
 
 [ext_resource type="PackedScene" uid="uid://0g1i3mj8c0cy" path="res://Levels/level.tscn" id="1_ixk5j"]
 [ext_resource type="PackedScene" uid="uid://bpivb27cy2baf" path="res://Levels/preplaced_block.tscn" id="2_yu7g3"]
@@ -7,8 +7,17 @@
 [ext_resource type="Texture2D" uid="uid://ddopkjfbo0kpx" path="res://Assets/Red/Wall_Shop_-_Red_64x64.png" id="5_uk3he"]
 [ext_resource type="Texture2D" uid="uid://dsje0q25cyw1r" path="res://Assets/Red/Lazer_Shop_-_Red_64x64.png" id="7_tyaiw"]
 [ext_resource type="Texture2D" uid="uid://db1sse1p63uin" path="res://Assets/Blue/Generator_Shop_-_Blue_64x64.png" id="9_qe83u"]
+[ext_resource type="PackedScene" uid="uid://b5v6booiosr5c" path="res://Blocks/energy_collector.tscn" id="10_87gp7"]
 [ext_resource type="Texture2D" uid="uid://bln6wwkvad3y8" path="res://Assets/Blue/Wall_Shop_-_Blue_64x64.png" id="10_y057k"]
 [ext_resource type="Texture2D" uid="uid://byf3nib8h8fpl" path="res://Assets/Blue/Lazer_Shop_-_Blue_64x64.png" id="11_1dajd"]
+[ext_resource type="Shader" path="res://Blocks/block.gdshader" id="11_voowt"]
+[ext_resource type="Texture2D" uid="uid://85aqxh284m12" path="res://Assets/Blue/Pipes_-_Blue_64x64.png" id="12_hd763"]
+[ext_resource type="Texture2D" uid="uid://cpsy7j08sj10g" path="res://Assets/Red/Pipes_-_Red_64x64.png" id="13_8uy8o"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ekvxs"]
+resource_local_to_scene = true
+shader = ExtResource("11_voowt")
+shader_parameter/percent_health = 0.0
 
 [node name="Arena" instance=ExtResource("1_ixk5j")]
 
@@ -78,3 +87,41 @@ position = Vector2(864, 96)
 
 [node name="PreplacedBlock4" parent="GameMaster" index="11" instance=ExtResource("2_yu7g3")]
 position = Vector2(864, 736)
+
+[node name="EnergyCollector" parent="GameMaster" index="12" instance=ExtResource("10_87gp7")]
+position = Vector2(864, 32)
+team = 2
+
+[node name="Sprite" parent="GameMaster/EnergyCollector" index="0"]
+material = SubResource("ShaderMaterial_ekvxs")
+texture = ExtResource("12_hd763")
+
+[node name="EnergyCollector2" parent="GameMaster" index="13" instance=ExtResource("10_87gp7")]
+position = Vector2(864, 800)
+team = 2
+
+[node name="Sprite" parent="GameMaster/EnergyCollector2" index="0"]
+material = SubResource("ShaderMaterial_ekvxs")
+texture = ExtResource("12_hd763")
+
+[node name="EnergyCollector3" parent="GameMaster" index="14" instance=ExtResource("10_87gp7")]
+position = Vector2(224, 800)
+
+[node name="Sprite" parent="GameMaster/EnergyCollector3" index="0"]
+material = SubResource("ShaderMaterial_ekvxs")
+texture = ExtResource("13_8uy8o")
+
+[node name="EnergyCollector4" parent="GameMaster" index="15" instance=ExtResource("10_87gp7")]
+position = Vector2(224, 32)
+
+[node name="Sprite" parent="GameMaster/EnergyCollector4" index="0"]
+material = SubResource("ShaderMaterial_ekvxs")
+texture = ExtResource("13_8uy8o")
+
+[node name="Player2Bank" parent="HUD" index="1"]
+text = "71"
+
+[editable path="GameMaster/EnergyCollector"]
+[editable path="GameMaster/EnergyCollector2"]
+[editable path="GameMaster/EnergyCollector3"]
+[editable path="GameMaster/EnergyCollector4"]

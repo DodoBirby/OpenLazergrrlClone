@@ -1,11 +1,20 @@
-[gd_scene load_steps=5 format=3 uid="uid://b68p0dtp6gx8t"]
+[gd_scene load_steps=7 format=3 uid="uid://b68p0dtp6gx8t"]
 
 [ext_resource type="Script" path="res://Blocks/wall.gd" id="1_765ea"]
 [ext_resource type="PackedScene" uid="uid://0rjtrn5awaon" path="res://Blocks/block.tscn" id="1_vd8l8"]
 [ext_resource type="Texture2D" uid="uid://0blk4u84ja7o" path="res://Assets/Red/Wall_-_Red_64x64.png" id="3_7l45n"]
 [ext_resource type="Texture2D" uid="uid://c3vhng404lngt" path="res://Assets/Blue/Wall_-_Blue_64x64.png" id="4_gdlho"]
+[ext_resource type="Shader" path="res://Blocks/block.gdshader" id="5_p3rvw"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5ub0m"]
+resource_local_to_scene = true
+shader = ExtResource("5_p3rvw")
+shader_parameter/percent_health = 0.0
 
 [node name="Wall" instance=ExtResource("1_vd8l8")]
 script = ExtResource("1_765ea")
 red_team_texture = ExtResource("3_7l45n")
 blue_team_texture = ExtResource("4_gdlho")
+
+[node name="Sprite" parent="." index="0"]
+material = SubResource("ShaderMaterial_5ub0m")

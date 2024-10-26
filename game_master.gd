@@ -66,20 +66,14 @@ func _network_process(_input: Dictionary) -> void:
 	
 	for generator in generators:
 		generator.target = null
-
+	for collector in collectors:
+		collector.fake_gen_targets.clear()
 	for lazer in lazers:
-		var found_gens = find_generators(lazer, true)
-		if found_gens.size() == 0:
-			continue
-		# Oldest gen placed breaks ties if there are two equally close generators
-		for generator in generators:
-			if found_gens.has(generator):
-				generator.target = lazer
-				break
+		request_power(lazer, 1)
 	for lazer in lazers:
 		lazer.shoot()
 	for collector in collectors:
-		var found_gens = find_generators(collector, false)
+		var found_gens = find_power_sources(collector, 0, false)
 		for gen in found_gens:
 			gen.target = collector
 	# Iterate over the .keys() because entries can get removed here
@@ -95,24 +89,45 @@ func has_player(pos: Vector2i) -> bool:
 			return true
 	return false
 
-func find_generators(block: Block, stop_at_closest: bool) -> Array[Generator]:
+func request_power(lazer: Lazer, power_requested: int):
+	var found_gens = find_power_sources(lazer, power_requested, true)
+	var base: EnergyCollector = null
+	if found_gens.back() is EnergyCollector:
+		base = found_gens.back()
+	if found_gens.size() < power_requested and not base:
+		return
+	# Oldest gen placed breaks ties if there are two equally close generators
+	var power_received = 0
+	for generator in generators:
+		if found_gens.has(generator):
+			generator.target = lazer
+			power_received += 1
+			if power_received == power_requested:
+				break
+	if power_received < power_requested and base:
+		base.request_power(lazer, power_requested - power_received)
+
+func find_power_sources(block: Block, number_to_find: int, stop_at_closest: bool) -> Array:
 	var queue = [block.tile_pos]
 	var seen: Dictionary = { block.tile_pos: true }
 	var team = block.team
-	var found_generator = false
-	var result: Array[Generator] = []
+	var base: EnergyCollector = null
+	var result = []
 	while queue.size() > 0:
 		var pos = queue.pop_front()
 		if block_map[pos] is Generator and block_map[pos].target == null:
-			found_generator = true
 			result.append(block_map[pos])
-		if found_generator and stop_at_closest:
+		elif block_map[pos] is EnergyCollector:
+			base = block_map[pos]
+		if result.size() >= number_to_find and stop_at_closest:
 			continue
 		var neighbours = find_connecting_blocks(pos, team)
 		for neighbour in neighbours:
 			if not seen.has(neighbour.tile_pos):
 				seen[neighbour.tile_pos] = true
 				queue.append(neighbour.tile_pos)
+	if base and result.size() < number_to_find:
+		result.append(base)
 	return result
 
 func find_connecting_blocks(pos: Vector2i, team: int) -> Array[Block]:

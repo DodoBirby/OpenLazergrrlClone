@@ -17,6 +17,7 @@ func fit_camera_to_map() -> void:
 	var used_rect = floor_tiles.get_used_rect()
 	used_rect.position *= 64
 	used_rect.size *= 64
+	used_rect = used_rect.grow(80)
 	var view_size = get_viewport().size
 	var zoom_x = float(view_size.x) / used_rect.size.x
 	var zoom_y = float(view_size.y) / used_rect.size.y

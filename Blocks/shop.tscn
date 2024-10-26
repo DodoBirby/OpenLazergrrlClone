@@ -1,8 +1,17 @@
-[gd_scene load_steps=3 format=3 uid="uid://gk0dkjckgdht"]
+[gd_scene load_steps=5 format=3 uid="uid://gk0dkjckgdht"]
 
 [ext_resource type="PackedScene" uid="uid://0rjtrn5awaon" path="res://Blocks/block.tscn" id="1_mat2t"]
 [ext_resource type="Script" path="res://Blocks/shop.gd" id="1_u7kog"]
+[ext_resource type="Shader" path="res://Blocks/block.gdshader" id="3_7vldf"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_w3n6q"]
+resource_local_to_scene = true
+shader = ExtResource("3_7vldf")
+shader_parameter/percent_health = 0.0
 
 [node name="Shop" instance=ExtResource("1_mat2t")]
 script = ExtResource("1_u7kog")
 product = null
+
+[node name="Sprite" parent="." index="0"]
+material = SubResource("ShaderMaterial_w3n6q")
