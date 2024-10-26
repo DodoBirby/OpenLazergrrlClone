@@ -1,7 +1,10 @@
 class_name Player
-extends AnimatedSprite2D
+extends Node2D
 
 @export var team: Constants.Teams = Constants.Teams.RED
+
+@onready var sprite: AnimatedSprite2D = %Sprite
+@onready var health_bar: Sprite2D = %HealthBar
 
 # Unsaved state
 var grid: Grid = preload("res://Grid/Grid.tres")
@@ -16,10 +19,13 @@ var prev_tile_pos: Vector2i
 var held_block: Block
 var ticks_to_move: int
 var state: STATES = STATES.STATIONARY
+var health: int = int(2.5 * Engine.physics_ticks_per_second)
 
 # Constants
 # Ticks to move one tile
 const MOVE_TICKS = 5
+
+var MAX_HEALTH: int = int(2.5 * Engine.physics_ticks_per_second)
 
 var lazergrrlanim = preload("res://Assets/Characters/LazerGrrlAnims.tres")
 var robotronanim = preload("res://Assets/Characters/RoboTronAnim.tres")
@@ -31,13 +37,14 @@ const REMAINDER_PIXELS = grid.TILE_SIZE % MOVE_TICKS
 enum STATES {
 	STATIONARY,
 	MOVING,
+	DEAD,
 }
 
 func _ready() -> void:
 	if team == Constants.Teams.RED:
-		sprite_frames = lazergrrlanim
+		sprite.sprite_frames = lazergrrlanim
 	else:
-		sprite_frames = robotronanim
+		sprite.sprite_frames = robotronanim
 
 #region Input Handling
 func _predict_remote_input(previous_input: Dictionary, _ticks_since_real_input: int) -> Dictionary:
@@ -98,6 +105,10 @@ func _network_preprocess(input: Dictionary) -> void:
 			game_master.register_desired_move(self, desired_pos)
 			if input.get("action"):
 				game_master.register_desired_interact(self, facing)
+		STATES.DEAD:
+			game_master.register_desired_move(self, Vector2i.MIN)
+			visible = false
+			tile_pos = Vector2i.MIN
 
 func _network_postprocess(_input: Dictionary) -> void:
 	update_visuals()
@@ -122,27 +133,33 @@ func calculate_intermediate_position() -> Vector2:
 	return prev_map_pos + direction * ticks_elapsed * PIXELS_PER_TICK + direction * remainder_pixels
 
 func update_visuals() -> void:
-	scale.x = 1
+	health_bar.material.set_shader_parameter("percent_health", float(health) / MAX_HEALTH)
+	sprite.scale.x = 1
 	if facing == Vector2i.UP:
-		play("Back")
+		sprite.play("Back")
 	elif facing == Vector2i.DOWN:
-		play("Front")
+		sprite.play("Front")
 	elif facing == Vector2i.LEFT:
-		play("Side")
-		scale.x = -1
+		sprite.play("Side")
+		sprite.scale.x = -1
 	else:
-		play("Side")
+		sprite.play("Side")
 	if held_block:
 		held_block.position = grid.grid_to_map(tile_pos + facing)
 #endregion
 
 #region Public functions
+func damage(amount: int) -> void:
+	health -= amount
+
 func end_move() -> void:
 	state = STATES.STATIONARY
 	prev_tile_pos = tile_pos
 	position = grid.grid_to_map(tile_pos)
 
 func start_move(target: Vector2i) -> void:
+	if state == STATES.DEAD:
+		return
 	if target == tile_pos:
 		return
 	tile_pos = target
@@ -164,7 +181,8 @@ func _save_state() -> Dictionary:
 		"ticks_to_move": ticks_to_move,
 		"state": state,
 		"facing": facing,
-		"held_block": block_path
+		"held_block": block_path,
+		"health": health
 	}
 
 func _load_state(loaded_state: Dictionary) -> void:
@@ -178,5 +196,6 @@ func _load_state(loaded_state: Dictionary) -> void:
 		held_block = null
 	else:
 		held_block = get_node(loaded_state["held_block"])
+	health = loaded_state["health"]
 	update_visuals()
 #endregion

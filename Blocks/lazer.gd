@@ -136,7 +136,7 @@ func shoot() -> void:
 	var current_pos = starting_pos
 	while game_master.lazer_can_pass(current_pos):
 		current_pos += facing
-	var target = game_master.get_block_at_pos(current_pos)
+	var target = game_master.get_damageable_at_pos(current_pos)
 	target_pos = calculate_collision_point(current_pos)
 	if not target or target.team == team:
 		return

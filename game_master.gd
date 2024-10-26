@@ -115,6 +115,13 @@ func _network_process(_input: Dictionary) -> void:
 		if block_map[pos].should_destroy():
 			block_map[pos].destroy()
 	
+	for player in players:
+		if player.health <= 0:
+			end_game_label.visible = true
+			end_game_label.text = "Team %s loses!" % player.team
+			player.state = player.STATES.DEAD
+			end_game()
+			break
 	
 #region Private Functions
 func has_player(pos: Vector2i) -> bool:
@@ -205,6 +212,18 @@ func tile_occupied(pos: Vector2i) -> bool:
 
 func lazer_can_pass(pos: Vector2i) -> bool:
 	return not tile_occupied(pos) and level.tile_has_floor(pos)
+
+func get_player_at_pos(pos: Vector2i):
+	for player in players:
+		if player.tile_pos == pos:
+			return player
+	return null
+
+func get_damageable_at_pos(pos: Vector2i):
+	if block_map.has(pos):
+		return block_map[pos]
+	var player = get_player_at_pos(pos)
+	return player
 
 func get_block_at_pos(pos: Vector2i):
 	return block_map.get(pos)
