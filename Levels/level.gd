@@ -15,6 +15,13 @@ func _ready() -> void:
 	game_master.player2bank = %Player2Bank
 	game_master.start_timer = %StartTimer
 	game_master.end_game_label = end_game_label
+	if SyncManager.network_adaptor.is_network_host():
+		for player in Lobby.players:
+			if player != 1:
+				client_player.set_multiplayer_authority(player)
+	else:
+		client_player.set_multiplayer_authority(multiplayer.get_unique_id())
+	Lobby.scene_loaded.rpc_id(1)
 
 func fit_camera_to_map() -> void:
 	var used_rect = floor_tiles.get_used_rect()
