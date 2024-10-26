@@ -48,6 +48,9 @@ func map_paths_to_targets(path):
 	else:
 		return get_node(path)
 
+func _interpolate_state(_old_state: Dictionary, _new_state: Dictionary, _weight: float) -> void:
+	return
+
 func _save_state() -> Dictionary:
 	var fake_gen_target_paths = fake_gen_targets.map(map_targets_to_paths)
 	return {

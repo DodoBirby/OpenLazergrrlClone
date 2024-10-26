@@ -65,8 +65,7 @@ func destroy():
 func deregister():
 	pass
 #endregion
-
-func _network_postprocess(_input: Dictionary) -> void:
+func update_visuals() -> void:
 	sprite.material.set_shader_parameter("percent_health", float(health) / MAX_HEALTH)
 	if active:
 		sprite.scale.x = 1
@@ -77,6 +76,14 @@ func _network_postprocess(_input: Dictionary) -> void:
 		sprite.scale.y = 0.5
 	if team == 2:
 		sprite.scale.x = -sprite.scale.x
+
+func _network_postprocess(_input: Dictionary) -> void:
+	update_visuals()
+
+func _interpolate_state(_old_state: Dictionary, new_state: Dictionary, _weight: float) -> void:
+	tile_pos = new_state["tile_pos"]
+	active = new_state["active"]
+	update_visuals()
 
 func _network_despawn() -> void:
 	if active:
@@ -94,4 +101,5 @@ func load_block_state(state: Dictionary) -> void:
 	health = state["health"]
 	tile_pos = state["tile_pos"]
 	active = state["active"]
+	update_visuals()
 #endregion

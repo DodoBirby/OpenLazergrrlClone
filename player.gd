@@ -19,7 +19,7 @@ var state: STATES = STATES.STATIONARY
 
 # Constants
 # Ticks to move one tile
-const MOVE_TICKS = 9
+const MOVE_TICKS = 5
 
 # Some calculated values to provide a smooth movement between tiles
 const PIXELS_PER_TICK = grid.TILE_SIZE / MOVE_TICKS
@@ -100,6 +100,9 @@ func _network_postprocess(_input: Dictionary) -> void:
 			position = calculate_intermediate_position()
 			if ticks_to_move <= 0:
 				end_move()
+				
+func _interpolate_state(old_state: Dictionary, new_state: Dictionary, weight: float) -> void:
+	position = lerp(old_state["position"], new_state["position"], weight)
 #endregion
 
 #region Private functions

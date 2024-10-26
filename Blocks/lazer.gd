@@ -4,7 +4,7 @@ extends Block
 @onready var damage_particles: CPUParticles2D = %DamageParticles
 
 # Saved State
-var charge: Array[int] = []
+var charge: Array[int] = [0]
 var facing: Vector2i = Vector2i.RIGHT
 var level: int = 1:
 	set(value):

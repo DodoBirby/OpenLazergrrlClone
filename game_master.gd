@@ -12,13 +12,14 @@ var generators: Array[Generator]
 var block_map: Dictionary
 var base_healthbars: Dictionary = {1: 30 * Engine.physics_ticks_per_second, 2: 30 * Engine.physics_ticks_per_second }
 var base_banks: Dictionary = {1: 15, 2: 15}
+var base_net_energy: Dictionary = {1: 0, 2: 0}
+var current_tick: int = 0
 
 # Unsaved State
 # Temporary Values, only last for a single frame
 var allowed_move: Dictionary
 var desired_moves: Dictionary
 var desired_interacts: Dictionary
-var base_net_energy: Dictionary = {1: 0, 2: 0}
 
 # This doesn't have to go into state because it's constant throughout a match
 var collectors: Array[EnergyCollector]
@@ -58,6 +59,7 @@ func _ready() -> void:
 # also preprocess and postprocess functions should only contain things that are either purely visual
 # or will always happen regardless of any intervening events
 func _network_process(_input: Dictionary) -> void:
+	current_tick += 1
 	for player in players:
 		if allowed_move[player] and desired_moves[player.desired_pos] == 1:
 			player.start_move(player.desired_pos)
@@ -71,26 +73,27 @@ func _network_process(_input: Dictionary) -> void:
 			player.held_block.place(player, pos)
 	desired_interacts.clear()
 	
-	for generator in generators:
-		generator.target = null
-	for collector in collectors:
-		collector.fake_gen_targets.clear()
+	if current_tick % 5 == 0:
+		for generator in generators:
+			generator.target = null
+		for collector in collectors:
+			collector.fake_gen_targets.clear()
+		for lazer in lazers:
+			lazer.requested_energy = false
+		base_net_energy[1] = 0
+		base_net_energy[2] = 0
+		for lazer in lazers:
+			if lazer.requested_energy:
+				continue
+			lazer.requested_energy = true
+			request_power(lazer)
+		for collector in collectors:
+			var found_gens = find_power_sources(collector, 0, false)
+			base_net_energy[collector.team] += found_gens.size()
+			for gen in found_gens:
+				gen.target = collector
 	for lazer in lazers:
-		lazer.requested_energy = false
-	base_net_energy[1] = 0
-	base_net_energy[2] = 0
-	for lazer in lazers:
-		if lazer.requested_energy:
-			continue
-		lazer.requested_energy = true
-		request_power(lazer)
-	for lazer in lazers:
-		lazer.shoot()
-	for collector in collectors:
-		var found_gens = find_power_sources(collector, 0, false)
-		base_net_energy[collector.team] += found_gens.size()
-		for gen in found_gens:
-			gen.target = collector
+			lazer.shoot()
 	# Iterate over the .keys() because entries can get removed here
 	for pos in block_map.keys():
 		if block_map[pos].should_destroy():
@@ -251,6 +254,7 @@ func _save_state() -> Dictionary:
 		save_state["generators"].append(gen.get_path())
 	save_state["base_healthbars"] = base_healthbars.duplicate()
 	save_state["base_banks"] = base_banks.duplicate()
+	save_state["current_tick"] = current_tick
 	return save_state
 	
 func _load_state(state: Dictionary) -> void:
@@ -265,5 +269,6 @@ func _load_state(state: Dictionary) -> void:
 		lazers.append(get_node(lazer))
 	for gen in state["generators"]:
 		generators.append(get_node(gen))
+	current_tick = state["current_tick"]
 	
 #endregion
