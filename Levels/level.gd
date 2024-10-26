@@ -21,6 +21,10 @@ func _ready() -> void:
 				client_player.set_multiplayer_authority(player)
 	else:
 		client_player.set_multiplayer_authority(multiplayer.get_unique_id())
+		camera.zoom.x *= -1
+		game_master.left_player = 2
+		game_master.right_player = 1
+		client_player.mirror_scaling = Vector2i(-1, 1)
 	Lobby.scene_loaded.rpc_id(1)
 
 func fit_camera_to_map() -> void:

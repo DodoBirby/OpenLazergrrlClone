@@ -10,6 +10,7 @@ extends Node2D
 var grid: Grid = preload("res://Grid/Grid.tres")
 var game_master: GameMaster
 var desired_pos: Vector2i
+var mirror_scaling: Vector2i = Vector2i.ONE
 
 # Saved state
 # position is saved as well
@@ -79,6 +80,8 @@ func _get_local_input() -> Dictionary:
 	var action: bool = false
 	if turn_vector != Vector2i.ZERO:
 		action = true
+	move_vector *= mirror_scaling
+	turn_vector *= mirror_scaling
 	return {
 		"move_vector": move_vector,
 		"turn_vector": turn_vector,

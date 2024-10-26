@@ -28,20 +28,22 @@ var collectors: Array[EnergyCollector]
 var players: Array[Player]
 
 # for test game only
+var left_player = 1
+var right_player = 2
 var player1bank: Label = null
 var player2bank: Label = null
 var start_timer: Label = null
 var end_game_label: Label = null
 
 func _process(_delta: float) -> void:
-	if base_net_energy[1] < 0:
-		player1bank.text = "%s %s" % [base_banks[1], base_net_energy[1]]
+	if base_net_energy[left_player] < 0:
+		player1bank.text = "%s %s" % [base_banks[left_player], base_net_energy[left_player]]
 	else:
-		player1bank.text = "%s +%s" % [base_banks[1], base_net_energy[1]]
-	if base_net_energy[2] < 0:
-		player2bank.text = "%s %s" % [base_banks[2], base_net_energy[2]]
+		player1bank.text = "%s +%s" % [base_banks[left_player], base_net_energy[left_player]]
+	if base_net_energy[right_player] < 0:
+		player2bank.text = "%s %s" % [base_banks[right_player], base_net_energy[right_player]]
 	else:
-		player2bank.text = "%s +%s" % [base_banks[2], base_net_energy[2]]
+		player2bank.text = "%s +%s" % [base_banks[right_player], base_net_energy[right_player]]
 	if current_tick < 90:
 		var time = ceil(float(90 - current_tick) / 30)
 		start_timer.text = "%s!" % time
