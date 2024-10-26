@@ -11,13 +11,14 @@ var lazers: Array[Lazer]
 var generators: Array[Generator]
 var block_map: Dictionary
 var base_healthbars: Dictionary = {1: 30 * Engine.physics_ticks_per_second, 2: 30 * Engine.physics_ticks_per_second }
-var base_banks: Dictionary = {1: 0, 2: 0}
+var base_banks: Dictionary = {1: 15, 2: 15}
 
 # Unsaved State
 # Temporary Values, only last for a single frame
 var allowed_move: Dictionary
 var desired_moves: Dictionary
 var desired_interacts: Dictionary
+var base_net_energy: Dictionary = {1: 0, 2: 0}
 
 # This doesn't have to go into state because it's constant throughout a match
 var collectors: Array[EnergyCollector]
@@ -28,8 +29,15 @@ var player1bank: Label = null
 var player2bank: Label = null
 
 func _process(_delta: float) -> void:
-	player1bank.text = str(base_banks[1])
-	player2bank.text = str(base_banks[2])
+	if base_net_energy[1] < 0:
+		player1bank.text = "%s %s" % [base_banks[1], base_net_energy[1]]
+	else:
+		player1bank.text = "%s +%s" % [base_banks[1], base_net_energy[1]]
+	if base_net_energy[2] < 0:
+		player2bank.text = "%s %s" % [base_banks[2], base_net_energy[2]]
+	else:
+		player2bank.text = "%s +%s" % [base_banks[2], base_net_energy[2]]
+	
 
 func _ready() -> void:
 	for child in get_children():
@@ -69,6 +77,8 @@ func _network_process(_input: Dictionary) -> void:
 		collector.fake_gen_targets.clear()
 	for lazer in lazers:
 		lazer.requested_energy = false
+	base_net_energy[1] = 0
+	base_net_energy[2] = 0
 	for lazer in lazers:
 		if lazer.requested_energy:
 			continue
@@ -78,6 +88,7 @@ func _network_process(_input: Dictionary) -> void:
 		lazer.shoot()
 	for collector in collectors:
 		var found_gens = find_power_sources(collector, 0, false)
+		base_net_energy[collector.team] += found_gens.size()
 		for gen in found_gens:
 			gen.target = collector
 	# Iterate over the .keys() because entries can get removed here
@@ -113,6 +124,7 @@ func request_power(lazer: Lazer):
 				break
 	if power_received < power_requested and base:
 		base.request_power(lazer, power_requested - power_received)
+		base_net_energy[lazer.team] -= power_requested - power_received
 
 func find_power_sources(block: Block, number_to_find: int, stop_at_closest: bool) -> Array:
 	var queue = [block.tile_pos]
@@ -122,7 +134,7 @@ func find_power_sources(block: Block, number_to_find: int, stop_at_closest: bool
 	var result = []
 	while queue.size() > 0:
 		var pos = queue.pop_front()
-		if block_map[pos] is Generator and block_map[pos].target == null:
+		if block_map[pos] is Generator and block_map[pos].target == null and is_reactor_spot(pos):
 			result.append(block_map[pos])
 		elif block_map[pos] is EnergyCollector:
 			base = block_map[pos]
@@ -157,6 +169,9 @@ func can_place(pos: Vector2i) -> bool:
 #endregion
 
 #region Public Functions
+func is_reactor_spot(pos: Vector2i) -> bool:
+	return level.reactor_at_tile_pos(pos)
+
 func get_base_health(team: int) -> int:
 	return base_healthbars[team]
 
@@ -214,9 +229,15 @@ func deal_base_damage(team: int, amount: int):
 	base_healthbars[team] -= amount
 	if base_healthbars[team] <= 0:
 		print("%s team loses" % team)
-	
+
+func get_bank_amount(team: int) -> int:
+	return base_banks[team]
+
+func remove_from_bank(team: int, amount: int):
+	base_banks[team] = max(base_banks[team] - amount, 0)
+
 func add_to_bank(team: int, amount: int):
-	base_banks[team] += amount
+	base_banks[team] = min(base_banks[team] + amount, 35)
 #endregion
 
 #region Save and Load State

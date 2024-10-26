@@ -12,6 +12,7 @@ shader_parameter/percent_health = 0.0
 [node name="BaseShop" instance=ExtResource("1_hv0c8")]
 script = ExtResource("1_w0qeu")
 product = null
+price = 0
 
 [node name="Sprite" parent="." index="0"]
 material = SubResource("ShaderMaterial_q7vyu")

@@ -25,8 +25,10 @@ func _network_postprocess(_input: Dictionary) -> void:
 	for i in range(fake_gen_timers.size()):
 		fake_gen_timers[i] += 1
 		if fake_gen_timers[i] >= MAX_CHARGE and fake_gen_targets[i] and fake_gen_targets[i].active:
+			if game_master.get_bank_amount(team) <= 0:
+				return
+			game_master.remove_from_bank(team, 1)
 			fake_gen_targets[i].power_up()
-			game_master.add_to_bank(team, -1)
 			fake_gen_timers[i] = 0
 
 func _on_scene_despawned(_node_name: String, node: Node):

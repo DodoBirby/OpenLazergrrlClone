@@ -12,6 +12,7 @@ func _network_spawn(_data: Dictionary) -> void:
 	super(_data)
 	MAX_HEALTH = 5 * Engine.physics_ticks_per_second
 	health = MAX_HEALTH
+	sell_price = 5
 	SyncManager.scene_despawned.connect(_on_scene_despawned)
 
 #region Virtual Block Functions
@@ -29,6 +30,8 @@ func place(player: Player, pos: Vector2i) -> void:
 func _network_postprocess(_input: Dictionary) -> void:
 	super(_input)
 	if !active:
+		return
+	if not game_master.is_reactor_spot(tile_pos):
 		return
 	charge += 1
 	# Block destruction has already happened so we know target is valid and alive

@@ -2,6 +2,7 @@ class_name BaseShop
 extends Block
 
 @export var product: PackedScene
+@export var price: int = 0
 
 var BASE_MAX_HEALTH = 30 * Engine.physics_ticks_per_second
 var THIRD_OF_BASE_MAX = 10 * Engine.physics_ticks_per_second
@@ -15,10 +16,14 @@ func interact(player: Player) -> void:
 	if player.team != team:
 		return
 	if player.held_block:
+		var sell_amount: int = player.held_block.sell_price * player.held_block.health / player.held_block.MAX_HEALTH
+		game_master.add_to_bank(team, sell_amount)
 		SyncManager.despawn(player.held_block)
 		player.held_block = null
 	else:
-		player.held_block = SyncManager.spawn("shop_product", game_master, product, { "team": team })
+		if game_master.get_bank_amount(team) >= price:
+			game_master.remove_from_bank(team, price)
+			player.held_block = SyncManager.spawn("shop_product", game_master, product, { "team": team })
 
 func damage(amount: int) -> void:
 	game_master.deal_base_damage(team, amount)

@@ -13,6 +13,7 @@ var MAX_HEALTH: int = 1
 
 # Initialized state
 @export var team: Constants.Teams = Constants.Teams.RED
+var sell_price: int = 0
 
 # Saved state
 var health: int = 1

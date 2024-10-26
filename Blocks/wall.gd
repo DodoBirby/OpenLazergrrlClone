@@ -5,6 +5,7 @@ func _network_spawn(_data: Dictionary) -> void:
 	super(_data)
 	MAX_HEALTH = 10 * Engine.physics_ticks_per_second
 	health = MAX_HEALTH
+	sell_price = 1
 
 #region Virtual Block Functions
 func interact(player: Player) -> void:

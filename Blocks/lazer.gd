@@ -23,6 +23,10 @@ var front_lazer: Lazer = null:
 
 # Unsaved State
 var requested_energy: bool = false:
+	get:
+		if front_lazer:
+			return front_lazer.requested_energy
+		return requested_energy
 	set(value):
 		requested_energy = value
 		if front_lazer:
@@ -67,6 +71,7 @@ func _network_spawn(data: Dictionary) -> void:
 		facing = Vector2i.LEFT
 	MAX_HEALTH = 5 * Engine.physics_ticks_per_second
 	health = MAX_HEALTH
+	sell_price = 5
 
 #region Virtual Block Functions
 func interact(player: Player) -> void:
