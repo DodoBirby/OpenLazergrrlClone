@@ -1,9 +1,10 @@
 [gd_scene load_steps=3 format=3 uid="uid://deatib868gsy5"]
 
-[ext_resource type="Texture2D" uid="uid://b6mb8dqnw12qf" path="res://icon.svg" id="1_y4hxc"]
+[ext_resource type="SpriteFrames" uid="uid://cc0qnjptfgt2l" path="res://Assets/Characters/LazerGrrlAnims.tres" id="1_p1773"]
 [ext_resource type="Script" path="res://player.gd" id="2_gt0e6"]
 
-[node name="Player" type="Sprite2D" groups=["network_sync"]]
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("1_y4hxc")
+[node name="Player" type="AnimatedSprite2D" groups=["network_sync"]]
+sprite_frames = ExtResource("1_p1773")
+animation = &"Back"
+speed_scale = 3.0
 script = ExtResource("2_gt0e6")

@@ -1,5 +1,5 @@
 class_name Player
-extends Sprite2D
+extends AnimatedSprite2D
 
 @export var team: Constants.Teams = Constants.Teams.RED
 
@@ -21,6 +21,9 @@ var state: STATES = STATES.STATIONARY
 # Ticks to move one tile
 const MOVE_TICKS = 5
 
+var lazergrrlanim = preload("res://Assets/Characters/LazerGrrlAnims.tres")
+var robotronanim = preload("res://Assets/Characters/RoboTronAnim.tres")
+
 # Some calculated values to provide a smooth movement between tiles
 const PIXELS_PER_TICK = grid.TILE_SIZE / MOVE_TICKS
 const REMAINDER_PIXELS = grid.TILE_SIZE % MOVE_TICKS
@@ -29,6 +32,12 @@ enum STATES {
 	STATIONARY,
 	MOVING,
 }
+
+func _ready() -> void:
+	if team == Constants.Teams.RED:
+		sprite_frames = lazergrrlanim
+	else:
+		sprite_frames = robotronanim
 
 #region Input Handling
 func _predict_remote_input(previous_input: Dictionary, _ticks_since_real_input: int) -> Dictionary:
@@ -91,8 +100,7 @@ func _network_preprocess(input: Dictionary) -> void:
 				game_master.register_desired_interact(self, facing)
 
 func _network_postprocess(_input: Dictionary) -> void:
-	if held_block:
-		held_block.position = grid.grid_to_map(tile_pos + facing)
+	update_visuals()
 	match state:
 		STATES.MOVING:
 			if ticks_to_move > 0:
@@ -112,6 +120,20 @@ func calculate_intermediate_position() -> Vector2:
 	var ticks_elapsed = MOVE_TICKS - ticks_to_move
 	var remainder_pixels = min(REMAINDER_PIXELS, ticks_elapsed)
 	return prev_map_pos + direction * ticks_elapsed * PIXELS_PER_TICK + direction * remainder_pixels
+
+func update_visuals() -> void:
+	scale.x = 1
+	if facing == Vector2i.UP:
+		play("Back")
+	elif facing == Vector2i.DOWN:
+		play("Front")
+	elif facing == Vector2i.LEFT:
+		play("Side")
+		scale.x = -1
+	else:
+		play("Side")
+	if held_block:
+		held_block.position = grid.grid_to_map(tile_pos + facing)
 #endregion
 
 #region Public functions
@@ -156,6 +178,5 @@ func _load_state(loaded_state: Dictionary) -> void:
 		held_block = null
 	else:
 		held_block = get_node(loaded_state["held_block"])
-	if held_block:
-		held_block.position = grid.grid_to_map(tile_pos + facing)
+	update_visuals()
 #endregion
