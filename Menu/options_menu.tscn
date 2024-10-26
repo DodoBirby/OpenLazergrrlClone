@@ -1,0 +1,60 @@
+[gd_scene load_steps=3 format=3 uid="uid://fn8hest7maw6"]
+
+[ext_resource type="Theme" uid="uid://c21ilh5150mrd" path="res://Menu/main_menu_theme.tres" id="1_1gpsv"]
+[ext_resource type="Script" path="res://Menu/options_menu.gd" id="2_87n4x"]
+
+[node name="OptionsMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_1gpsv")
+script = ExtResource("2_87n4x")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -704.0
+offset_top = -362.0
+offset_right = 704.0
+offset_bottom = 362.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BackButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -177.5
+offset_top = 280.5
+offset_right = 177.5
+offset_bottom = 333.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Go back to Main Menu"
+
+[node name="ActionList" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -197.0
+offset_top = -90.0
+offset_right = 197.0
+offset_bottom = -38.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]

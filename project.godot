@@ -21,6 +21,7 @@ SyncManager="*res://addons/godot-rollback-netcode/SyncManager.gd"
 SyncDebugger="*res://addons/godot-rollback-netcode/SyncDebugger.gd"
 Constants="*res://constants.gd"
 Lobby="*res://lobby.gd"
+ConfigFileHandler="*res://config_file_handler.gd"
 
 [debug]
 

@@ -22,3 +22,6 @@ func _on_join_button_pressed() -> void:
 func _on_failed_to_connect():
 	visible = true
 	status_label.text = "Failed to connect"
+
+func _on_options_button_pressed() -> void:
+	get_tree().change_scene_to_file("res://Menu/options_menu.tscn")

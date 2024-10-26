@@ -67,6 +67,8 @@ func _on_failed_to_connect():
 func _on_server_disconnected():
 	multiplayer.multiplayer_peer = null
 	players.clear()
+	if SyncManager.started:
+		SyncManager.stop()
 	get_tree().change_scene_to_file("res://Menu/main_menu.tscn")
 
 func _on_sync_stopped():
