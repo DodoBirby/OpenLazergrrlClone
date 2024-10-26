@@ -31,18 +31,6 @@ text = "Server"
 layout_mode = 2
 text = "Client"
 
-[node name="StopButton" type="Button" parent="CanvasLayer"]
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -8.0
-offset_top = -8.0
-grow_horizontal = 0
-grow_vertical = 0
-text = "Stop Game"
-
 [node name="SyncLostLabel" type="Label" parent="CanvasLayer"]
 unique_name_in_owner = true
 visible = false
@@ -73,4 +61,3 @@ unique_name_in_owner = true
 
 [connection signal="pressed" from="CanvasLayer/ButtonContainer/ServerButton" to="." method="_on_server_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/ButtonContainer/ClientButton" to="." method="_on_client_button_pressed"]
-[connection signal="pressed" from="CanvasLayer/StopButton" to="." method="_on_stop_button_pressed"]

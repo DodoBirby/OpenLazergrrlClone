@@ -4,6 +4,8 @@ extends Node
 var grid: Grid = preload("res://Grid/Grid.tres")
 @export var level: Level
 
+@onready var end_timer: NetworkTimer = %EndTimer
+
 #TODO remove base code from the gamemaster, it's kinda weird for it to be here
 
 # Saved State
@@ -28,6 +30,8 @@ var players: Array[Player]
 # for test game only
 var player1bank: Label = null
 var player2bank: Label = null
+var start_timer: Label = null
+var end_game_label: Label = null
 
 func _process(_delta: float) -> void:
 	if base_net_energy[1] < 0:
@@ -38,9 +42,16 @@ func _process(_delta: float) -> void:
 		player2bank.text = "%s %s" % [base_banks[2], base_net_energy[2]]
 	else:
 		player2bank.text = "%s +%s" % [base_banks[2], base_net_energy[2]]
+	if current_tick < 90:
+		var time = ceil(float(90 - current_tick) / 30)
+		start_timer.text = "%s!" % time
+	else:
+		start_timer.visible = false
 	
 
 func _ready() -> void:
+	SyncManager.sync_started.connect(_on_sync_started)
+	end_timer.timeout.connect(stop)
 	for child in get_children():
 		if child is Player:
 			child.game_master = self
@@ -59,7 +70,12 @@ func _ready() -> void:
 # also preprocess and postprocess functions should only contain things that are either purely visual
 # or will always happen regardless of any intervening events
 func _network_process(_input: Dictionary) -> void:
+	if not end_timer.is_stopped():
+		return
 	current_tick += 1
+	if current_tick <= 90:
+		desired_moves.clear()
+		return
 	for player in players:
 		if allowed_move[player] and desired_moves[player.desired_pos] == 1:
 			player.start_move(player.desired_pos)
@@ -169,6 +185,12 @@ func can_place(pos: Vector2i) -> bool:
 	# We already know the tile is empty of blocks because of where this is called
 	# So we just have to check for players
 	return not has_player(pos)
+
+func end_game() -> void:
+	end_timer.start()
+
+func stop() -> void:
+	SyncManager.stop()
 #endregion
 
 #region Public Functions
@@ -216,6 +238,8 @@ func register_desired_move(player: Player, move: Vector2i) -> void:
 	allowed_move[player] = true
 
 func register_desired_interact(player: Player, interact: Vector2i) -> void:
+	if current_tick <= 90:
+		return
 	desired_interacts[player] = interact
 
 func move_block_to_hand(player: Player, block: Block) -> void:
@@ -230,8 +254,10 @@ func move_hand_to_field(player: Player, pos: Vector2i) -> void:
 	
 func deal_base_damage(team: int, amount: int):
 	base_healthbars[team] -= amount
-	if base_healthbars[team] <= 0:
-		print("%s team loses" % team)
+	if base_healthbars[team] <= 0 and SyncManager.ensure_current_tick_input_complete():
+		end_game_label.visible = true
+		end_game_label.text = "Team %s loses!" % team
+		end_game()
 
 func get_bank_amount(team: int) -> int:
 	return base_banks[team]
@@ -272,3 +298,6 @@ func _load_state(state: Dictionary) -> void:
 	current_tick = state["current_tick"]
 	
 #endregion
+
+func _on_sync_started() -> void:
+	start_timer.visible = true

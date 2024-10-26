@@ -27,12 +27,9 @@ tile_map_data = PackedByteArray("AAABAAEAAAAAAAAAAAABAAIAAAAAAAAAAAABAAMAAAAAAAA
 [node name="Foreground" parent="." index="1"]
 tile_map_data = PackedByteArray("AAADAAMAAAAAAAAAAAADAAkAAAAAAAAAAAANAAkAAAAAAAAAAAANAAMAAAAAAAAAAAAKAAMAAAAAAAAAAAAIAAMAAAAAAAAAAAAGAAMAAAAAAAAAAAAGAAYAAAAAAAAAAAAIAAYAAAAAAAAAAAAKAAYAAAAAAAAAAAAKAAkAAAAAAAAAAAAIAAkAAAAAAAAAAAAGAAkAAAAAAAAAAAA=")
 
-[node name="ClientPlayer" parent="GameMaster" index="0"]
+[node name="ClientPlayer" parent="GameMaster" index="1"]
 position = Vector2(928, 416)
 team = 2
-
-[node name="ServerPlayer" parent="GameMaster" index="1"]
-position = Vector2(160, 416)
 
 [node name="PreplacedBlock" parent="GameMaster" index="2" instance=ExtResource("2_yu7g3")]
 position = Vector2(224, 96)
@@ -117,6 +114,9 @@ position = Vector2(224, 32)
 [node name="Sprite" parent="GameMaster/EnergyCollector4" index="0"]
 material = SubResource("ShaderMaterial_ekvxs")
 texture = ExtResource("13_8uy8o")
+
+[node name="ServerPlayer" parent="GameMaster" index="16"]
+position = Vector2(160, 416)
 
 [node name="Player2Bank" parent="HUD" index="1"]
 text = "71"

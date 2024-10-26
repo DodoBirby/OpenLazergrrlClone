@@ -10,14 +10,12 @@ const MAX_CLIENTS = 2
 
 const BASE_LOG_PATH = "user://detailed_logs"
 
-var logging_enabled = false
 
 func _ready() -> void:
 	background.visible = true
 	multiplayer.peer_connected.connect(_on_peer_connected)
 	multiplayer.connected_to_server.connect(_on_connected_to_server)
 	SyncManager.sync_error.connect(_on_sync_error)
-	SyncManager.sync_started.connect(_on_sync_started)
 	SyncManager.sync_stopped.connect(_on_sync_stopped)
 	SyncManager.sync_lost.connect(_on_sync_lost)
 	SyncManager.sync_regained.connect(_on_sync_regained)
@@ -27,18 +25,13 @@ func _on_sync_lost() -> void:
 
 func _on_sync_regained() -> void:
 	sync_lost_label.visible = false
-
-func _on_sync_started() -> void:
-	if logging_enabled:
-		if not DirAccess.dir_exists_absolute(BASE_LOG_PATH):
-			DirAccess.make_dir_absolute(BASE_LOG_PATH)
-		var datetime = Time.get_datetime_string_from_system(true)
-		var log_file_name = "%s-peer-%d.log" % [datetime, multiplayer.multiplayer_peer.get_unique_id()]
-		SyncManager.start_logging(BASE_LOG_PATH + "/" + log_file_name) 
 		
 func _on_sync_stopped() -> void:
-	if logging_enabled:
-		SyncManager.stop_logging()
+	SyncManager.clear_peers()
+	var peer = multiplayer.multiplayer_peer
+	if peer:
+		peer.close()
+	get_tree().reload_current_scene()
 
 func _on_server_button_pressed() -> void:
 	var peer = ENetMultiplayerPeer.new()

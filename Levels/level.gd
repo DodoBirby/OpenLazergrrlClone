@@ -6,12 +6,15 @@ extends Node
 @onready var foreground: TileMapLayer = %Foreground
 @onready var server_player: Player = %ServerPlayer
 @onready var client_player: Player = %ClientPlayer
+@onready var end_game_label: Label = %EndGameLabel
 
 func _ready() -> void:
 	server_player.set_multiplayer_authority(1)
 	fit_camera_to_map()
 	game_master.player1bank = %Player1Bank
 	game_master.player2bank = %Player2Bank
+	game_master.start_timer = %StartTimer
+	game_master.end_game_label = end_game_label
 
 func fit_camera_to_map() -> void:
 	var used_rect = floor_tiles.get_used_rect()
