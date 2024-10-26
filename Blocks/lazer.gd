@@ -6,9 +6,25 @@ extends Block
 # Saved State
 var charge: int = 0
 var facing: Vector2i = Vector2i.RIGHT
+var level: int = 1
+var front_lazer: Lazer = null:
+	set(value):
+		if front_lazer == value:
+			return
+		if front_lazer:
+			front_lazer.deregistered.disconnect(_on_front_lazer_deregistered)
+		if value:
+			value.deregistered.connect(_on_front_lazer_deregistered)
+		front_lazer = value
 
 # Pseudo Constant
 var MAX_CHARGE: int = 3 * Engine.physics_ticks_per_second
+var red_team_super_back_texture = preload("res://Assets/Red/Super_Lazer_Back_-_Red_64x64.png")
+var red_team_super_front_texture = preload("res://Assets/Red/Super_Lazer_Front_-_Red_64x64.png")
+var blue_team_super_back_texture = preload("res://Assets/Blue/Super_Lazer_Back_-_Blue_64x64.png")
+var blue_team_super_front_texture = preload("res://Assets/Blue/Super_Lazer_Front_-_Blue_64x64.png")
+
+signal deregistered
 
 var target_pos: Vector2i = Vector2i.MIN:
 	set(value):
@@ -50,11 +66,27 @@ func interact(player: Player) -> void:
 	
 func place(player: Player, pos: Vector2i) -> void:
 	game_master.move_hand_to_field(player, pos)
-
+	var back_pos = pos - facing
+	var front_pos = pos + facing
+	var back_block = game_master.get_block_at_pos(back_pos)
+	var front_block = game_master.get_block_at_pos(front_pos)
+	if back_block is Lazer and can_connect_to_lazer(back_block):
+		connect_to_lazer_from_front(back_block)
+	elif front_block is Lazer and can_connect_to_lazer(front_block):
+		connect_to_lazer_from_back(front_block)
+		
 func get_connection_directions() -> Array[Vector2i]:
 	var all_directions = super()
-	all_directions.erase(facing)
+	if not front_lazer:
+		all_directions.erase(facing)
 	return all_directions
+
+func deregister():
+	deregistered.emit()
+	level = 1
+	if front_lazer:
+		front_lazer.level = 1
+		front_lazer = null
 #endregion
 
 #region Public Functions
@@ -83,6 +115,17 @@ func shoot() -> void:
 #endregion
 
 #region Private Functions
+func connect_to_lazer_from_back(lazer: Lazer) -> void:
+	front_lazer = lazer
+	lazer.level = 2
+
+func connect_to_lazer_from_front(lazer: Lazer) -> void:
+	lazer.front_lazer = self
+	level = 2
+
+func can_connect_to_lazer(lazer: Lazer) -> bool:
+	return lazer.team == team and lazer.facing == facing and not lazer.front_lazer and lazer.level == 1
+
 func calculate_lazer_collision_point(other_lazer_tile_pos: Vector2i) -> Vector2i:
 	return lerp(Vector2(calculate_nose_point()), Vector2(calculate_collision_point(other_lazer_tile_pos)), 0.5)
 
@@ -97,16 +140,38 @@ func lazer_should_collide(lazer: Lazer) -> bool:
 	return lazer.facing == -facing and lazer.charge > 0
 #endregion
 
+func _network_postprocess(_input: Dictionary) -> void:
+	super(_input)
+	if level == 2 and not front_lazer:
+		sprite.texture = red_team_super_front_texture if team == Constants.Teams.RED else blue_team_super_front_texture
+	elif front_lazer:
+		sprite.texture = red_team_super_back_texture if team == Constants.Teams.RED else blue_team_super_back_texture
+	else:
+		sprite.texture = red_team_texture if team == Constants.Teams.RED else blue_team_texture
+
 #region Save and Load State
 func _save_state() -> Dictionary:
 	var state: Dictionary = {}
 	save_block_state(state)
 	state["facing"] = facing
 	state["charge"] = charge
+	if front_lazer:
+		state["front_lazer"] = front_lazer.get_path()
+	else:
+		state["front_lazer"] = null
+	state["level"] = level
 	return state
 
 func _load_state(state: Dictionary) -> void:
 	load_block_state(state)
 	charge = state["charge"]
 	facing = state["facing"]
+	if state["front_lazer"]:
+		front_lazer = get_node(state["front_lazer"])
+	else:
+		front_lazer = null
+	level = state["level"]
 #endregion
+
+func _on_front_lazer_deregistered():
+	front_lazer = null

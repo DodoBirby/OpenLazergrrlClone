@@ -58,6 +58,11 @@ func destroy():
 	destroyed.emit()
 	game_master.deregister_block(tile_pos)
 	SyncManager.despawn(self)
+	
+# Called by the game master when this block is deregistered (removed from the board)
+# This happens when the block is destroyed, or just picked up by the player, or despawned due to rollback while on the board
+func deregister():
+	pass
 #endregion
 
 func _network_postprocess(_input: Dictionary) -> void:
@@ -72,6 +77,10 @@ func _network_postprocess(_input: Dictionary) -> void:
 		sprite.scale.y = 0.5
 	if team == 2:
 		sprite.scale.x = -sprite.scale.x
+
+func _network_despawn() -> void:
+	if active:
+		deregister()
 
 #region Save and Load State
 # Call in child classes to save the block specific state

@@ -92,6 +92,8 @@ func has_player(pos: Vector2i) -> bool:
 func request_power(lazer: Lazer, power_requested: int):
 	var found_gens = find_power_sources(lazer, power_requested, true)
 	var base: EnergyCollector = null
+	if found_gens.size() == 0:
+		return
 	if found_gens.back() is EnergyCollector:
 		base = found_gens.back()
 	if found_gens.size() < power_requested and not base:
@@ -172,11 +174,13 @@ func register_block(block: Block, pos: Vector2i) -> void:
 		collectors.append(block)
 
 func deregister_block(pos: Vector2i) -> void:
+	block_map[pos].deregister()
 	if block_map[pos] is Lazer:
 		lazers.erase(block_map[pos])
 	elif block_map[pos] is Generator:
 		generators.erase(block_map[pos])
 	block_map.erase(pos)
+	
 
 func register_desired_move(player: Player, move: Vector2i) -> void:
 	if block_map.has(move) or not level.tile_has_floor(move):
