@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=4 uid="uid://cf8oiwjc05gon"]
+[gd_scene load_steps=16 format=4 uid="uid://cf8oiwjc05gon"]
 
 [ext_resource type="PackedScene" uid="uid://0g1i3mj8c0cy" path="res://Levels/level.tscn" id="1_ixk5j"]
 [ext_resource type="PackedScene" uid="uid://bpivb27cy2baf" path="res://Levels/preplaced_block.tscn" id="2_yu7g3"]
@@ -13,6 +13,7 @@
 [ext_resource type="Shader" path="res://Blocks/block.gdshader" id="11_voowt"]
 [ext_resource type="Texture2D" uid="uid://85aqxh284m12" path="res://Assets/Blue/Pipes_-_Blue_64x64.png" id="12_hd763"]
 [ext_resource type="Texture2D" uid="uid://cpsy7j08sj10g" path="res://Assets/Red/Pipes_-_Red_64x64.png" id="13_8uy8o"]
+[ext_resource type="PackedScene" uid="uid://drdn8o2eyw3yj" path="res://Levels/exclusion_zone.tscn" id="14_dm8oo"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ekvxs"]
 resource_local_to_scene = true
@@ -118,8 +119,22 @@ texture = ExtResource("13_8uy8o")
 [node name="ServerPlayer" parent="GameMaster" index="16"]
 position = Vector2(160, 416)
 
+[node name="ExclusionZone" parent="GameMaster" index="17" instance=ExtResource("14_dm8oo")]
+position = Vector2(96, 96)
+end_pos = Vector2i(4, 11)
+growth_amount = Vector2i(-1, 0)
+
+[node name="ExclusionZone2" parent="GameMaster" index="18" instance=ExtResource("14_dm8oo")]
+position = Vector2(992, 96)
+end_pos = Vector2i(12, 11)
+team = 2
+growth_amount = Vector2i(1, 0)
+
 [node name="Player2Bank" parent="HUD" index="1"]
 text = "71"
+
+[node name="Background" parent="." index="5"]
+layer = -1
 
 [editable path="GameMaster/EnergyCollector"]
 [editable path="GameMaster/EnergyCollector2"]

@@ -7,8 +7,10 @@ extends Node
 @onready var server_player: Player = %ServerPlayer
 @onready var client_player: Player = %ClientPlayer
 @onready var end_game_label: Label = %EndGameLabel
+@onready var background: CanvasLayer = %Background
 
 func _ready() -> void:
+	background.visible = true
 	server_player.set_multiplayer_authority(1)
 	fit_camera_to_map()
 	game_master.player1bank = %Player1Bank

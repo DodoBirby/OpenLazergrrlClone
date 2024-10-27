@@ -40,6 +40,7 @@ func scene_loaded():
 	var remote_peer = multiplayer.get_remote_sender_id()
 	players_loaded[remote_peer] = true
 	if players_loaded.size() >= 2:
+		await get_tree().create_timer(2.0).timeout
 		SyncManager.start()
 
 func _on_peer_connected(id: int) -> void:

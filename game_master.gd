@@ -26,6 +26,7 @@ var desired_interacts: Dictionary
 # This doesn't have to go into state because it's constant throughout a match
 var collectors: Array[EnergyCollector]
 var players: Array[Player]
+var exclusion_zones: Array[ExclusionZone]
 
 # for test game only
 var left_player = 1
@@ -64,6 +65,10 @@ func _ready() -> void:
 		if child is Block:
 			child.game_master = self
 			register_block(child, grid.map_to_grid(child.position))
+			child.position = grid.grid_to_map(child.tile_pos)
+		if child is ExclusionZone:
+			exclusion_zones.append(child)
+			child.tile_pos = grid.map_to_grid(child.position)
 			child.position = grid.grid_to_map(child.tile_pos)
 
 # Anything that needs to happen in a strict order should be managed by the game master in this function
@@ -126,6 +131,14 @@ func _network_process(_input: Dictionary) -> void:
 			break
 	
 #region Private Functions
+func is_excluded(team: Constants.Teams, move: Vector2i) -> bool:
+	for zone in exclusion_zones:
+		if zone.team == team:
+			continue
+		if zone.is_colliding(move):
+			return true
+	return false
+
 func has_player(pos: Vector2i) -> bool:
 	for player in players:
 		if player.tile_pos == pos:
@@ -252,7 +265,7 @@ func deregister_block(pos: Vector2i) -> void:
 	
 
 func register_desired_move(player: Player, move: Vector2i) -> void:
-	if block_map.has(move) or not level.tile_has_floor(move):
+	if block_map.has(move) or not level.tile_has_floor(move) or is_excluded(player.team, move):
 		allowed_move[player] = false
 		return
 	desired_moves[move] = desired_moves.get_or_add(move, 0) + 1

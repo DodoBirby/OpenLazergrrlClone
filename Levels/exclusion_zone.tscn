@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://drdn8o2eyw3yj"]
+
+[ext_resource type="Script" path="res://exclusion_zone.gd" id="1_aknpb"]
+[ext_resource type="Script" path="res://addons/godot-rollback-netcode/NetworkTimer.gd" id="2_do64o"]
+
+[node name="ExclusionZone" type="Node2D" groups=["network_sync"]]
+script = ExtResource("1_aknpb")
+
+[node name="NetworkTimer" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("2_do64o")
+
+[connection signal="timeout" from="NetworkTimer" to="." method="_on_network_timer_timeout"]
