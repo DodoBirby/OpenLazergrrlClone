@@ -45,8 +45,10 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="StartButton" type="Button" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 60
+disabled = true
 text = "Start"
 
 [connection signal="pressed" from="MarginContainer/VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]

@@ -30,9 +30,6 @@ func join_lobby(ip: String, port: int):
 
 @rpc("authority", "reliable", "call_local")
 func start_match():
-	for player in players:
-		if player != multiplayer.get_unique_id():
-			SyncManager.add_peer(player)
 	get_tree().change_scene_to_file("res://Levels/arena.tscn")
 
 @rpc("any_peer", "reliable", "call_local")
@@ -40,11 +37,11 @@ func scene_loaded():
 	var remote_peer = multiplayer.get_remote_sender_id()
 	players_loaded[remote_peer] = true
 	if players_loaded.size() >= 2:
-		await get_tree().create_timer(2.0).timeout
 		SyncManager.start()
 
 func _on_peer_connected(id: int) -> void:
 	_register_player.rpc_id(id, player_name)
+	SyncManager.add_peer(id)
 
 @rpc("any_peer", "reliable")
 func _register_player(peer_name):
@@ -55,6 +52,7 @@ func _register_player(peer_name):
 func _on_peer_disconnected(id: int):
 	players.erase(id)
 	player_disconnected.emit()
+	SyncManager.remove_peer(id)
 
 func _on_connected_to_server():
 	var peer_id = multiplayer.get_unique_id()
@@ -70,8 +68,8 @@ func _on_server_disconnected():
 	players.clear()
 	if SyncManager.started:
 		SyncManager.stop()
+	SyncManager.clear_peers()
 	get_tree().change_scene_to_file("res://Menu/main_menu.tscn")
 
 func _on_sync_stopped():
-	SyncManager.clear_peers()
 	get_tree().change_scene_to_file("res://Menu/lobby_screen.tscn")
