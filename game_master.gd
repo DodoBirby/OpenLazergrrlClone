@@ -123,7 +123,7 @@ func _network_process(_input: Dictionary) -> void:
 			block_map[pos].destroy()
 	
 	for player in players:
-		if player.health <= 0:
+		if player.health <= 0 and SyncManager.ensure_current_tick_input_complete():
 			end_game_label.visible = true
 			end_game_label.text = "Team %s loses!" % player.team
 			player.state = player.STATES.DEAD
@@ -212,7 +212,8 @@ func end_game() -> void:
 	end_timer.start()
 
 func stop() -> void:
-	SyncManager.stop()
+	if SyncManager.network_adaptor.is_network_host():
+		SyncManager.stop()
 #endregion
 
 #region Public Functions
