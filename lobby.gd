@@ -30,6 +30,7 @@ func join_lobby(ip: String, port: int):
 
 @rpc("authority", "reliable", "call_local")
 func start_match():
+	players_loaded.clear()
 	get_tree().change_scene_to_file("res://Levels/arena.tscn")
 
 @rpc("any_peer", "reliable", "call_local")
