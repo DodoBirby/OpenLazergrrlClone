@@ -19,6 +19,7 @@
 resource_local_to_scene = true
 shader = ExtResource("11_voowt")
 shader_parameter/percent_health = 0.0
+shader_parameter/primary_color = null
 
 [node name="Arena" instance=ExtResource("1_ixk5j")]
 

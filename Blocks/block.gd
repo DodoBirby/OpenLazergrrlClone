@@ -1,8 +1,7 @@
 class_name Block
 extends Node2D
 
-@export var red_team_texture: Texture2D
-@export var blue_team_texture: Texture2D
+@export var texture: Texture2D
 
 @onready var sprite: Sprite2D = $Sprite
 
@@ -28,7 +27,9 @@ func _network_spawn(data: Dictionary) -> void:
 	team = data["team"]
 	sprite.scale.x = 0.5
 	sprite.scale.y = 0.5
-	sprite.texture = red_team_texture if team == Constants.Teams.RED else blue_team_texture
+	sprite.texture = texture
+	var color = Color.RED if team == Constants.Teams.RED else Color.BLUE
+	sprite.material.set_shader_parameter("primary_color", color)
 
 #region Virtual Block Methods
 # Called when the player uses action while targeting this block on the field

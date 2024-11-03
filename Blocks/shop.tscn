@@ -8,6 +8,7 @@
 resource_local_to_scene = true
 shader = ExtResource("3_7vldf")
 shader_parameter/percent_health = 0.0
+shader_parameter/primary_color = null
 
 [node name="Shop" instance=ExtResource("1_mat2t")]
 script = ExtResource("1_u7kog")

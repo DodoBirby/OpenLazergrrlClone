@@ -10,11 +10,11 @@
 resource_local_to_scene = true
 shader = ExtResource("5_743s7")
 shader_parameter/percent_health = 0.0
+shader_parameter/primary_color = null
 
 [node name="Lazer" instance=ExtResource("1_jmy03")]
 script = ExtResource("1_m3xch")
-red_team_texture = ExtResource("3_bjocr")
-blue_team_texture = ExtResource("4_uodot")
+texture = ExtResource("3_bjocr")
 
 [node name="Sprite" parent="." index="0"]
 material = SubResource("ShaderMaterial_rvots")

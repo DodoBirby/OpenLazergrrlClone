@@ -34,10 +34,8 @@ var requested_energy: bool = false:
 
 # Pseudo Constant
 var MAX_CHARGE: int = 3 * Engine.physics_ticks_per_second
-var red_team_super_back_texture = preload("res://Assets/Red/Super_Lazer_Back_-_Red_64x64.png")
-var red_team_super_front_texture = preload("res://Assets/Red/Super_Lazer_Front_-_Red_64x64.png")
-var blue_team_super_back_texture = preload("res://Assets/Blue/Super_Lazer_Back_-_Blue_64x64.png")
-var blue_team_super_front_texture = preload("res://Assets/Blue/Super_Lazer_Front_-_Blue_64x64.png")
+var super_back_texture = preload("res://Assets/Red/Super_Lazer_Back_-_Red_64x64.png")
+var super_front_texture = preload("res://Assets/Red/Super_Lazer_Front_-_Red_64x64.png")
 
 signal deregistered
 
@@ -203,11 +201,11 @@ func should_be_overpowered_by(lazer: Lazer) -> bool:
 func _network_postprocess(_input: Dictionary) -> void:
 	super(_input)
 	if level == 2 and not front_lazer:
-		sprite.texture = red_team_super_front_texture if team == Constants.Teams.RED else blue_team_super_front_texture
+		sprite.texture = super_front_texture
 	elif front_lazer:
-		sprite.texture = red_team_super_back_texture if team == Constants.Teams.RED else blue_team_super_back_texture
+		sprite.texture = super_back_texture
 	else:
-		sprite.texture = red_team_texture if team == Constants.Teams.RED else blue_team_texture
+		sprite.texture = texture
 
 #region Save and Load State
 func _save_state() -> Dictionary:
