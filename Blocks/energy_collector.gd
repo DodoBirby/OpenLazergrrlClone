@@ -10,7 +10,7 @@ var fake_gen_timers: Array[int] = []
 
 func _ready() -> void:
 	add_to_group("network_sync")
-	SyncManager.scene_despawned.connect(_on_scene_despawned)
+	EventBus.lazer_deregistered.connect(_on_lazer_deregistered)
 
 func power_up() -> void:
 	game_master.add_to_bank(team, 1)
@@ -31,9 +31,9 @@ func _network_postprocess(_input: Dictionary) -> void:
 			fake_gen_targets[i].power_up()
 			fake_gen_timers[i] = 0
 
-func _on_scene_despawned(_node_name: String, node: Node):
+func _on_lazer_deregistered(lazer: Lazer):
 	for i in range(fake_gen_targets.size()):
-		if fake_gen_targets[i] == node:
+		if fake_gen_targets[i] == lazer:
 			fake_gen_targets[i] = null
 
 func map_targets_to_paths(target: Lazer):

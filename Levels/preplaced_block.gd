@@ -56,16 +56,12 @@ func _ready() -> void:
 		return
 	game_master = get_parent()
 	SyncManager.sync_started.connect(_on_sync_started)
-	SyncManager.scene_spawned.connect(_on_scene_spawned)
 	visible = false
 
 func _on_sync_started() -> void:
-	SyncManager.spawn("preplaced_block", game_master, get_scene_to_spawn(), {"team": team, "tile_pos": grid.map_to_grid(position)})
-	
-func _on_scene_spawned(node_name: String, spawned_node: Node, _scene: PackedScene, data: Dictionary) -> void:
-	if node_name == "preplaced_block":
-		game_master.register_block(spawned_node, data["tile_pos"])
-		spawned_node.position = grid.grid_to_map(spawned_node.tile_pos)
+	var block = SyncManager.spawn("preplaced_block", game_master, get_scene_to_spawn(), {"team": team })
+	game_master.register_block(block, grid.map_to_grid(position))
+	block.position = grid.grid_to_map(block.tile_pos)
 
 func get_scene_to_spawn() -> PackedScene:
 	match type:

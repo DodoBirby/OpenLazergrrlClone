@@ -1,4 +1,4 @@
-extends "res://addons/godot-rollback-netcode/MessageSerializer.gd"
+extends "res://addons/delta_rollback/MessageSerializer.gd"
 
 var path_mapping = {
 	"/root/Arena/GameMaster/ServerPlayer": 1,

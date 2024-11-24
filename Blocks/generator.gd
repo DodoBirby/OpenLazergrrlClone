@@ -13,7 +13,7 @@ func _network_spawn(_data: Dictionary) -> void:
 	MAX_HEALTH = 5 * Engine.physics_ticks_per_second
 	health = MAX_HEALTH
 	sell_price = 5
-	SyncManager.scene_despawned.connect(_on_scene_despawned)
+	EventBus.lazer_deregistered.connect(_on_lazer_deregistered)
 
 #region Virtual Block Functions
 func interact(player: Player) -> void:
@@ -59,6 +59,6 @@ func _load_state(state: Dictionary) -> void:
 		target = get_node(state["target"])
 #endregion
 
-func _on_scene_despawned(_node_name: String, node: Node):
-	if target == node:
+func _on_lazer_deregistered(lazer: Lazer):
+	if target == lazer:
 		target = null

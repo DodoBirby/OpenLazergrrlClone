@@ -1,13 +1,12 @@
 [gd_scene load_steps=3 format=3 uid="uid://dr86o8ds1noms"]
 
 [ext_resource type="Script" path="res://game_master.gd" id="1_7gqde"]
-[ext_resource type="Script" path="res://addons/godot-rollback-netcode/NetworkTimer.gd" id="2_1rufd"]
+[ext_resource type="Script" path="res://addons/delta_rollback/NetworkTimer.gd" id="2_3h6nv"]
 
 [node name="GameMaster" type="Node" groups=["network_sync"]]
 script = ExtResource("1_7gqde")
 
 [node name="EndTimer" type="Node" parent="."]
 unique_name_in_owner = true
-script = ExtResource("2_1rufd")
-one_shot = true
-wait_ticks = 90
+script = ExtResource("2_3h6nv")
+wait_ticks = 60

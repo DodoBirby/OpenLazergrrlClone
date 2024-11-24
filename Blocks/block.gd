@@ -21,9 +21,12 @@ var active: bool = false
 
 signal destroyed
 
+# We need to add network_sync in the ready function so that it's in the group before the spawnmanager checks the value
+func _ready() -> void:
+	add_to_group("network_sync")
+
 # data.keys = ["team"]
 func _network_spawn(data: Dictionary) -> void:
-	add_to_group("network_sync")
 	team = data["team"]
 	sprite.scale.x = 0.5
 	sprite.scale.y = 0.5

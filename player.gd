@@ -24,7 +24,7 @@ var health: int = int(2.5 * Engine.physics_ticks_per_second)
 
 # Constants
 # Ticks to move one tile
-const MOVE_TICKS = 5
+const MOVE_TICKS = 9
 
 var MAX_HEALTH: int = int(2.5 * Engine.physics_ticks_per_second)
 

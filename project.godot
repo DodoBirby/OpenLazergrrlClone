@@ -21,11 +21,11 @@ config/windows_native_icon="res://icon.ico"
 
 [autoload]
 
-SyncManager="*res://addons/godot-rollback-netcode/SyncManager.gd"
-SyncDebugger="*res://addons/godot-rollback-netcode/SyncDebugger.gd"
+SyncManager="*res://addons/delta_rollback/SyncManager.gd"
 Constants="*res://constants.gd"
 Lobby="*res://lobby.gd"
 ConfigFileHandler="*res://config_file_handler.gd"
+EventBus="*res://event_bus.gd"
 
 [debug]
 
@@ -39,7 +39,7 @@ window/stretch/mode="canvas_items"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/godot-rollback-netcode/plugin.cfg")
+enabled=PackedStringArray("res://addons/delta_rollback/plugin.cfg")
 
 [global_group]
 
@@ -115,17 +115,12 @@ player1_turnright={
 
 [network]
 
-rollback/max_buffer_size=10
+rollback/max_buffer_size=15
 rollback/input_delay=1
-rollback/interpolation=true
 rollback/limits/max_input_frames_per_message=10
 rollback/limits/max_messages_at_once=5
 rollback/classes/message_serializer="res://CustomMessageSerializer.gd"
 rollback/debug/physics_process_msecs=28.0
-
-[physics]
-
-common/physics_ticks_per_second=30
 
 [rendering]
 
