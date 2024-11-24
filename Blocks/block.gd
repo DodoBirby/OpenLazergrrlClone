@@ -9,15 +9,33 @@ extends Node2D
 var grid: Grid = preload("res://Grid/Grid.tres")
 var game_master: GameMaster
 var MAX_HEALTH: int = 1
+static var all_directions: Array[Vector2i] = [Vector2i.DOWN, Vector2i.UP, Vector2i.LEFT, Vector2i.RIGHT]
 
 # Initialized state
 @export var team: Constants.Teams = Constants.Teams.RED
 var sell_price: int = 0
 
 # Saved state
-var health: int = 1
-var tile_pos: Vector2i
-var active: bool = false
+var _health: int = 1
+var health: int = 1:
+	set(value):
+		SyncManager.set_synced(self, "_health", value)
+	get:
+		return _health
+
+var _tile_pos: Vector2i
+var tile_pos: Vector2i:
+	set(value):
+		SyncManager.set_synced(self, "_tile_pos", value)
+	get:
+		return _tile_pos
+
+var _active: bool
+var active: bool = false:
+	set(value):
+		SyncManager.set_synced(self, "_active", value)
+	get:
+		return _active
 
 signal destroyed
 
@@ -50,7 +68,7 @@ func damage(amount: int):
 # Returns the directions that this block connects to, there must exist a reverse direction
 # on the neighbouring block for the connection to be made
 func get_connection_directions() -> Array[Vector2i]:
-	return [Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT]
+	return all_directions
 
 # Called by the game master to decide if this block should be destroyed
 func should_destroy() -> bool:
@@ -82,7 +100,8 @@ func update_visuals() -> void:
 		sprite.scale.x = -sprite.scale.x
 
 func _network_postprocess(_input: Dictionary) -> void:
-	update_visuals()
+	if not SyncManager.is_in_rollback():
+		update_visuals()
 
 func _interpolate_state(_old_state: Dictionary, new_state: Dictionary, _weight: float) -> void:
 	tile_pos = new_state["tile_pos"]
@@ -92,18 +111,3 @@ func _interpolate_state(_old_state: Dictionary, new_state: Dictionary, _weight: 
 func _network_despawn() -> void:
 	if active:
 		deregister()
-
-#region Save and Load State
-# Call in child classes to save the block specific state
-func save_block_state(state: Dictionary) -> void:
-	state["health"] = health
-	state["tile_pos"] = tile_pos
-	state["active"] = active
-
-# Call in child classes to load the block specific state
-func load_block_state(state: Dictionary) -> void:
-	health = state["health"]
-	tile_pos = state["tile_pos"]
-	active = state["active"]
-	update_visuals()
-#endregion

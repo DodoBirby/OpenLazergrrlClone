@@ -2,8 +2,19 @@ class_name Generator
 extends Block
 
 # Saved State
-var charge: int = 0
-var target = null
+var _charge: int = 0
+var charge: int = 0:
+	set(value):
+		SyncManager.set_synced(self, "_charge", value)
+	get:
+		return _charge
+
+var _target = null
+var target = null:
+	set(value):
+		SyncManager.set_synced(self, "_target", value)
+	get:
+		return _target
 
 # Psuedo Constant
 var MAX_CHARGE: int = int(2.5 * Engine.physics_ticks_per_second)
@@ -38,26 +49,6 @@ func _network_postprocess(_input: Dictionary) -> void:
 	if charge >= MAX_CHARGE and target and target.active:
 		target.power_up()
 		charge = 0
-
-#region Save and Load State
-func _save_state() -> Dictionary:
-	var state: Dictionary = {}
-	save_block_state(state)
-	if target:
-		state["target"] = target.get_path()
-	else:
-		state["target"] = null
-	state["charge"] = charge
-	return state
-
-func _load_state(state: Dictionary) -> void:
-	load_block_state(state)
-	charge = state["charge"]
-	if state["target"] == null:
-		target = null
-	else:
-		target = get_node(state["target"])
-#endregion
 
 func _on_lazer_deregistered(lazer: Lazer):
 	if target == lazer:

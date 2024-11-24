@@ -14,13 +14,54 @@ var mirror_scaling: Vector2i = Vector2i.ONE
 
 # Saved state
 # position is saved as well
-var facing: Vector2i
-var tile_pos: Vector2i
-var prev_tile_pos: Vector2i
-var held_block: Block
-var ticks_to_move: int
-var state: STATES = STATES.STATIONARY
-var health: int = int(2.5 * Engine.physics_ticks_per_second)
+var _facing: Vector2i
+var facing: Vector2i:
+	set(value):
+		SyncManager.set_synced(self, "_facing", value)
+	get:
+		return _facing
+
+var _tile_pos: Vector2i
+var tile_pos: Vector2i:
+	set(value):
+		SyncManager.set_synced(self, "_tile_pos", value)
+	get:
+		return _tile_pos
+
+var _prev_tile_pos: Vector2i
+var prev_tile_pos: Vector2i:
+	set(value):
+		SyncManager.set_synced(self, "_prev_tile_pos", value)
+	get:
+		return _prev_tile_pos
+
+var _held_block: Block
+var held_block: Block:
+	set(value):
+		SyncManager.set_synced(self, "_held_block", value)
+	get:
+		return _held_block
+
+var _ticks_to_move: int
+var ticks_to_move: int:
+	set(value):
+		SyncManager.set_synced(self, "_ticks_to_move", value)
+	get:
+		return _ticks_to_move
+
+var _state: STATES = STATES.STATIONARY
+var state: STATES = STATES.STATIONARY:
+	set(value):
+		SyncManager.set_synced(self, "_state", value)
+	get:
+		return _state
+
+var _health: int = int(2.5 * Engine.physics_ticks_per_second)
+var health: int = int(2.5 * Engine.physics_ticks_per_second):
+	set(value):
+		SyncManager.set_synced(self, "_health", value)
+	get:
+		return _health
 
 # Constants
 # Ticks to move one tile
@@ -168,37 +209,4 @@ func start_move(target: Vector2i) -> void:
 	tile_pos = target
 	state = STATES.MOVING
 	ticks_to_move = MOVE_TICKS
-#endregion
-
-#region Save and Load state
-func _save_state() -> Dictionary:
-	var block_path
-	if held_block:
-		block_path = held_block.get_path()
-	else:
-		block_path = null
-	return {
-		"position": position,
-		"tile_pos": tile_pos,
-		"prev_tile_pos": prev_tile_pos,
-		"ticks_to_move": ticks_to_move,
-		"state": state,
-		"facing": facing,
-		"held_block": block_path,
-		"health": health
-	}
-
-func _load_state(loaded_state: Dictionary) -> void:
-	position = loaded_state["position"]
-	tile_pos = loaded_state["tile_pos"]
-	prev_tile_pos = loaded_state["prev_tile_pos"]
-	ticks_to_move = loaded_state["ticks_to_move"]
-	state = loaded_state["state"]
-	facing = loaded_state["facing"]
-	if loaded_state["held_block"] == null:
-		held_block = null
-	else:
-		held_block = get_node(loaded_state["held_block"])
-	health = loaded_state["health"]
-	update_visuals()
 #endregion

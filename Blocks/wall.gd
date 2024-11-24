@@ -18,14 +18,3 @@ func interact(player: Player) -> void:
 func place(player: Player, pos: Vector2i) -> void:
 	game_master.move_hand_to_field(player, pos)
 #endregion
-
-#region Save and Load State
-func _save_state() -> Dictionary:
-	var state: Dictionary = {}
-	save_block_state(state)
-	return state
-	
-func _load_state(state: Dictionary) -> void:
-	load_block_state(state)
-	return
-#endregion

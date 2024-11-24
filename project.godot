@@ -120,7 +120,7 @@ rollback/input_delay=1
 rollback/limits/max_input_frames_per_message=10
 rollback/limits/max_messages_at_once=5
 rollback/classes/message_serializer="res://CustomMessageSerializer.gd"
-rollback/debug/physics_process_msecs=28.0
+rollback/debug/rollback_ticks=13
 
 [rendering]
 

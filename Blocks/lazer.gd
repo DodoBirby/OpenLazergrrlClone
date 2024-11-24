@@ -5,21 +5,27 @@ extends Block
 
 # Saved State
 var charge: Array[int] = [0]
-var facing: Vector2i = Vector2i.RIGHT
+var _facing: Vector2i = Vector2i.RIGHT
+var facing: Vector2i = Vector2i.RIGHT:
+	set(value):
+		SyncManager.set_synced(self, "_facing", value)
+	get:
+		return _facing
+
+var _level: int = 1
 var level: int = 1:
 	set(value):
-		level = value
+		SyncManager.set_synced(self, "_level", value)
 		charge.resize(2 * level - 1)
+	get:
+		return _level
 
+var _front_lazer: Lazer = null
 var front_lazer: Lazer = null:
 	set(value):
-		if front_lazer == value:
-			return
-		if front_lazer:
-			front_lazer.deregistered.disconnect(_on_front_lazer_deregistered)
-		if value:
-			value.deregistered.connect(_on_front_lazer_deregistered)
-		front_lazer = value
+		SyncManager.set_synced(self, "_front_lazer", value)
+	get:
+		return _front_lazer
 
 # Unsaved State
 var requested_energy: bool = false:
@@ -32,12 +38,13 @@ var requested_energy: bool = false:
 		if front_lazer:
 			front_lazer.requested_energy = value
 
+#TODO rework this when lazer rotation is added
+var connection_directions = all_directions.duplicate()
+
 # Pseudo Constant
 var MAX_CHARGE: int = 3 * Engine.physics_ticks_per_second
 var super_back_texture = preload("res://Assets/Red/Super_Lazer_Back_-_Red_64x64.png")
 var super_front_texture = preload("res://Assets/Red/Super_Lazer_Front_-_Red_64x64.png")
-
-signal deregistered
 
 var target_pos: Vector2i = Vector2i.MIN:
 	set(value):
@@ -70,6 +77,8 @@ func _network_spawn(data: Dictionary) -> void:
 	MAX_HEALTH = 5 * Engine.physics_ticks_per_second
 	health = MAX_HEALTH
 	sell_price = 5
+	connection_directions.erase(facing)
+	EventBus.lazer_deregistered.connect(_on_lazer_deregistered)
 
 #region Virtual Block Functions
 func interact(player: Player) -> void:
@@ -91,13 +100,12 @@ func place(player: Player, pos: Vector2i) -> void:
 		connect_to_lazer_from_back(front_block)
 		
 func get_connection_directions() -> Array[Vector2i]:
-	var all_directions = super()
 	if not front_lazer:
-		all_directions.erase(facing)
+		return connection_directions
 	return all_directions
 
 func deregister():
-	deregistered.emit()
+	EventBus.lazer_deregistered.emit()
 	target_pos = Vector2i.MIN
 	clear_charge()
 	level = 1
@@ -210,26 +218,13 @@ func _network_postprocess(_input: Dictionary) -> void:
 #region Save and Load State
 func _save_state() -> Dictionary:
 	var state: Dictionary = {}
-	save_block_state(state)
-	state["facing"] = facing
 	state["charge"] = charge.duplicate()
-	if front_lazer:
-		state["front_lazer"] = front_lazer.get_path()
-	else:
-		state["front_lazer"] = null
-	state["level"] = level
 	return state
 
 func _load_state(state: Dictionary) -> void:
-	load_block_state(state)
 	charge = state["charge"].duplicate()
-	facing = state["facing"]
-	if state["front_lazer"]:
-		front_lazer = get_node(state["front_lazer"])
-	else:
-		front_lazer = null
-	level = state["level"]
 #endregion
 
-func _on_front_lazer_deregistered():
-	front_lazer = null
+func _on_lazer_deregistered(lazer: Lazer):
+	if front_lazer == lazer:
+		front_lazer = null
