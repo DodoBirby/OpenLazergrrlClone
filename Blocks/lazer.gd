@@ -105,7 +105,7 @@ func get_connection_directions() -> Array[Vector2i]:
 	return all_directions
 
 func deregister():
-	EventBus.lazer_deregistered.emit()
+	EventBus.lazer_deregistered.emit(self)
 	target_pos = Vector2i.MIN
 	clear_charge()
 	level = 1

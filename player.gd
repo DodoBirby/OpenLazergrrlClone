@@ -62,10 +62,17 @@ var health: int = int(2.5 * Engine.physics_ticks_per_second):
 		SyncManager.set_synced(self, "_health", value)
 	get:
 		return _health
+		
+var _boost_move: bool = true
+var boost_move: bool = false:
+	set(value):
+		SyncManager.set_synced(self, "_boost_move", value)
+	get:
+		return _boost_move
 
 # Constants
 # Ticks to move one tile
-const MOVE_TICKS = 9
+const MOVE_TICKS = 5
 
 var MAX_HEALTH: int = int(2.5 * Engine.physics_ticks_per_second)
 
@@ -138,6 +145,8 @@ func _network_preprocess(input: Dictionary) -> void:
 		facing = input.get("turn_vector")
 	match state:
 		STATES.STATIONARY:
+			if input.get("move_vector") == Vector2i.ZERO:
+				boost_move = true
 			desired_pos = tile_pos + input.get("move_vector")
 			game_master.register_desired_move(self, desired_pos)
 			if input.get("action"):
@@ -163,9 +172,10 @@ func _network_postprocess(_input: Dictionary) -> void:
 			position = calculate_intermediate_position()
 			if ticks_to_move <= 0:
 				end_move()
-				
+
 func _interpolate_state(old_state: Dictionary, new_state: Dictionary, weight: float) -> void:
 	position = lerp(old_state["position"], new_state["position"], weight)
+
 #endregion
 
 #region Private functions
@@ -208,5 +218,16 @@ func start_move(target: Vector2i) -> void:
 		return
 	tile_pos = target
 	state = STATES.MOVING
-	ticks_to_move = MOVE_TICKS
+	ticks_to_move = MOVE_TICKS - int(boost_move)
+	boost_move = false
+#endregion
+
+#region Save and Load State
+func _save_state() -> Dictionary:
+	return {
+		"position": position
+	}
+	
+func _load_state(loaded_state: Dictionary) -> void:
+	position = loaded_state["position"]
 #endregion

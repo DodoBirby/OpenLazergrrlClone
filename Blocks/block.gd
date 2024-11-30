@@ -103,11 +103,6 @@ func _network_postprocess(_input: Dictionary) -> void:
 	if not SyncManager.is_in_rollback():
 		update_visuals()
 
-func _interpolate_state(_old_state: Dictionary, new_state: Dictionary, _weight: float) -> void:
-	tile_pos = new_state["tile_pos"]
-	active = new_state["active"]
-	update_visuals()
-
 func _network_despawn() -> void:
 	if active:
 		deregister()

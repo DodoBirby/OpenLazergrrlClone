@@ -116,7 +116,7 @@ func _network_process(_input: Dictionary) -> void:
 			for gen in found_gens:
 				gen.target = collector
 	for lazer in lazers:
-			lazer.shoot()
+		lazer.shoot()
 	# Iterate over the .keys() because entries can get removed here
 	for pos in block_map.keys():
 		if block_map[pos].should_destroy():
