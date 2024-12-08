@@ -1,3 +1,5 @@
-Fix block sell prices
+Fix block sell prices : TEST THIS
 Fix movement collision bugs
-Differentiate alt left and alt right in controls
+Do player colours
+Add new characters
+Sound effects/Music

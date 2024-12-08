@@ -1,9 +1,16 @@
-[gd_scene load_steps=6 format=3 uid="uid://deatib868gsy5"]
+[gd_scene load_steps=8 format=3 uid="uid://deatib868gsy5"]
 
 [ext_resource type="SpriteFrames" uid="uid://cc0qnjptfgt2l" path="res://Assets/Characters/LazerGrrlAnims.tres" id="1_p1773"]
 [ext_resource type="Script" path="res://player.gd" id="2_gt0e6"]
+[ext_resource type="Shader" path="res://playerSprite.gdshader" id="2_x3bxm"]
 [ext_resource type="Texture2D" uid="uid://bsoh00yudjvyd" path="res://Assets/HealthBar.png" id="3_bmrq6"]
 [ext_resource type="Shader" path="res://player.gdshader" id="3_w5q13"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2i5oy"]
+resource_local_to_scene = true
+shader = ExtResource("2_x3bxm")
+shader_parameter/primary_color = Color(1, 0, 0, 1)
+shader_parameter/secondary_color = Color(1, 1, 0, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_54tnq"]
 resource_local_to_scene = true
@@ -17,6 +24,7 @@ metadata/_edit_group_ = true
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
 unique_name_in_owner = true
+material = SubResource("ShaderMaterial_2i5oy")
 sprite_frames = ExtResource("1_p1773")
 animation = &"Back"
 speed_scale = 3.0

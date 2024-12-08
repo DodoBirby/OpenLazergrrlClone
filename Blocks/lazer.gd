@@ -41,6 +41,8 @@ var requested_energy: bool = false:
 #TODO rework this when lazer rotation is added
 var connection_directions = all_directions.duplicate()
 
+var lazer_color: Color
+
 # Pseudo Constant
 var MAX_CHARGE: int = 3 * Engine.physics_ticks_per_second
 var super_back_texture = preload("res://Assets/Red/Super_Lazer_Back_-_Red_64x64.png")
@@ -58,7 +60,6 @@ func _draw() -> void:
 		return
 	var start_pos = facing * grid.HALF_SIZE
 	var end_pos = target_pos - Vector2i(position)
-	var color = Color(1, 0, 0) if team == Constants.Teams.RED else Color(0, 0, 1)
 	damage_particles.position = end_pos
 	damage_particles.direction = -facing
 	if damage_particles.amount != 60 * level:
@@ -66,7 +67,7 @@ func _draw() -> void:
 	damage_particles.emission_rect_extents.y = 8 * level
 	damage_particles.emitting = true
 	damage_particles.visible = true
-	draw_line(start_pos, end_pos, color, 16 * level)
+	draw_line(start_pos, end_pos, lazer_color, 16 * level)
 
 func _network_spawn(data: Dictionary) -> void:
 	super(data)
@@ -78,6 +79,7 @@ func _network_spawn(data: Dictionary) -> void:
 	health = MAX_HEALTH
 	sell_price = 5
 	connection_directions.erase(facing)
+	lazer_color = PlayerColors.primary_color_map[team]
 	EventBus.lazer_deregistered.connect(_on_lazer_deregistered)
 
 #region Virtual Block Functions

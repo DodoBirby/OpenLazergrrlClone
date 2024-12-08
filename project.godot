@@ -26,6 +26,7 @@ Constants="*res://constants.gd"
 Lobby="*res://lobby.gd"
 ConfigFileHandler="*res://config_file_handler.gd"
 EventBus="*res://event_bus.gd"
+PlayerColors="*res://player_colors.gd"
 
 [debug]
 

@@ -14,6 +14,7 @@ var tile_pos: Vector2i = Vector2i.ZERO
 @export var growth_timer = 900
 @export var growth_amount = Vector2i.ZERO
 var grid: Grid = preload("res://Grid/Grid.tres")
+var color: Color = Color(0.6, 0.0, 0.0)
 
 @onready var network_timer: NetworkTimer = %NetworkTimer
 
@@ -22,10 +23,11 @@ func _draw() -> void:
 	rect.end = grid.grid_to_map(end_pos)
 	rect = rect.abs().grow(32)
 	rect.position -= Vector2i(position)
-	var color = Color(0.6, 0.0, 0.0) if team == Constants.Teams.RED else Color(0.0, 0.0, 0.6)
 	draw_rect(rect, color, false, 4)
 
 func _ready() -> void:
+	color = PlayerColors.primary_color_map[team] * 0.6
+	color.a = 1.0
 	network_timer.wait_ticks = growth_timer
 	network_timer.start()
 	queue_redraw()

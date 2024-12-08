@@ -72,8 +72,5 @@ position = Vector2(160, 544)
 position = Vector2(1312, 544)
 team = 2
 
-[node name="Player2Bank" parent="HUD" index="1"]
-text = "71"
-
 [node name="Background" parent="." index="5"]
 layer = -1

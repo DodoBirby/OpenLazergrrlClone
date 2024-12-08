@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://c3egfkxc43444"]
+[gd_scene load_steps=4 format=3 uid="uid://c3egfkxc43444"]
 
 [ext_resource type="Theme" uid="uid://c21ilh5150mrd" path="res://Menu/main_menu_theme.tres" id="1_n3our"]
 [ext_resource type="Script" path="res://Menu/main_menu.gd" id="1_ux81b"]
+[ext_resource type="Texture2D" uid="uid://p4tgoswcpv31" path="res://Assets/Red/Lazer_-_Red_64x64.png" id="3_a0i6b"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -23,15 +24,30 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -400.5
-offset_top = -270.5
+offset_top = -501.5
 offset_right = 400.5
-offset_bottom = 142.5
+offset_bottom = -88.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 80
-text = "LazerClone
-Demo"
+text = "Photon
+Fortress"
 horizontal_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -70.0
+offset_top = -281.0
+offset_right = 69.0
+offset_bottom = -142.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_a0i6b")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
@@ -41,9 +57,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -227.0
-offset_top = -14.5
+offset_top = -80.0
 offset_right = 227.0
-offset_bottom = 513.5
+offset_bottom = 517.0
 grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_group_ = true
@@ -80,6 +96,10 @@ text = "Join Lobby"
 layout_mode = 2
 text = "Options"
 
+[node name="ColorButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Change Colors"
+
 [node name="StatusLabel" type="Label" parent="VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -88,3 +108,4 @@ horizontal_alignment = 1
 [connection signal="pressed" from="VBoxContainer/HostButton" to="." method="_on_host_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/OptionsButton" to="." method="_on_options_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/ColorButton" to="." method="_on_color_button_pressed"]

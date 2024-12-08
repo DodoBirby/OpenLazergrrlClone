@@ -15,6 +15,8 @@ func _on_host_button_pressed() -> void:
 	get_tree().change_scene_to_file("res://Menu/lobby_screen.tscn")
 
 func _on_join_button_pressed() -> void:
+	if player_name_field.text.strip_edges().is_empty():
+		return
 	Lobby.player_name = player_name_field.text
 	Lobby.join_lobby(ip_field.text, int(port_field.text))
 	visible = false
@@ -25,3 +27,6 @@ func _on_failed_to_connect():
 
 func _on_options_button_pressed() -> void:
 	get_tree().change_scene_to_file("res://Menu/options_menu.tscn")
+
+func _on_color_button_pressed() -> void:
+	get_tree().change_scene_to_file("res://Menu/color_menu.tscn")

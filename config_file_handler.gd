@@ -30,10 +30,22 @@ func _ready() -> void:
 		cfg.set_value("Keybindings", "TurnDown", "%K")
 		cfg.set_value("Keybindings", "TurnLeft", "%J")
 		cfg.set_value("Keybindings", "TurnRight", "%L")
+		cfg.set_value("Colors", "Primary", Color.RED)
+		cfg.set_value("Colors", "Secondary", Color.YELLOW)
 		cfg.save(config_path)
 	else:
 		cfg.load(config_path)
 		load_input_from_cfg()
+		load_colors_from_cfg()
+
+func load_colors_from_cfg():
+	Lobby.primary_color = cfg.get_value("Colors", "Primary", Color.RED)
+	Lobby.secondary_color = cfg.get_value("Colors", "Secondary", Color.YELLOW)
+
+func save_color_to_cfg():
+	cfg.set_value("Colors", "Primary", Lobby.primary_color)
+	cfg.set_value("Colors", "Secondary", Lobby.secondary_color)
+	cfg.save(config_path)
 
 func load_input_from_cfg():
 	for key in cfg.get_section_keys("Keybindings"):

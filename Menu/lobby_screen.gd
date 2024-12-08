@@ -16,7 +16,7 @@ func update_player_labels():
 		child.queue_free()
 	for player in Lobby.players:
 		var player_label = player_label_scene.instantiate()
-		player_label.text = Lobby.players[player]
+		player_label.text = Lobby.players[player]["name"]
 		player_labels.add_child(player_label)
 	if Lobby.players.size() >= 2 and multiplayer.is_server():
 		start_button.disabled = false

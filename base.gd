@@ -74,6 +74,8 @@ func _network_postprocess(_input: Dictionary) -> void:
 	var energy_count = game_master.get_bank_amount(team)
 	for child in energy_balls.get_children():
 		if count <= energy_count:
+			child.offset.x = randi_range(-1, 1)
+			child.offset.y = randi_range(-1, 1)
 			child.visible = true
 		else:
 			child.visible = false

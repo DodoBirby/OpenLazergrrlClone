@@ -51,8 +51,8 @@ func _network_spawn(data: Dictionary) -> void:
 	sprite.scale.x = 0.5
 	sprite.scale.y = 0.5
 	sprite.texture = texture
-	primary_color = Color.RED if team == Constants.Teams.RED else Color.BLUE
-	secondary_color = Color.YELLOW if team == Constants.Teams.RED else Color.CYAN
+	primary_color = PlayerColors.primary_color_map[team]
+	secondary_color = PlayerColors.secondary_color_map[team]
 	sprite.material.set_shader_parameter("primary_color", primary_color)
 	sprite.material.set_shader_parameter("secondary_color", secondary_color)
 

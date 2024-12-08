@@ -11,6 +11,8 @@ var grid: Grid = preload("res://Grid/Grid.tres")
 var game_master: GameMaster
 var desired_pos: Vector2i
 var mirror_scaling: Vector2i = Vector2i.ONE
+var primary_color: Color
+var secondary_color: Color
 
 # Saved state
 # position is saved as well
@@ -94,6 +96,10 @@ func _ready() -> void:
 		sprite.sprite_frames = lazergrrlanim
 	else:
 		sprite.sprite_frames = robotronanim
+	primary_color = PlayerColors.primary_color_map[team]
+	secondary_color = PlayerColors.secondary_color_map[team]
+	sprite.material.set_shader_parameter("primary_color", primary_color)
+	sprite.material.set_shader_parameter("secondary_color", secondary_color)
 
 #region Input Handling
 func _predict_remote_input(previous_input: Dictionary, _ticks_since_real_input: int) -> Dictionary:

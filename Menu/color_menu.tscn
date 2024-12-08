@@ -1,0 +1,231 @@
+[gd_scene load_steps=3 format=3 uid="uid://cf15hcovdkuk0"]
+
+[ext_resource type="Script" path="res://Menu/color_menu.gd" id="1_4q32c"]
+[ext_resource type="Theme" uid="uid://c21ilh5150mrd" path="res://Menu/main_menu_theme.tres" id="1_oohbw"]
+
+[node name="ColorMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_4q32c")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -784.0
+offset_top = -396.0
+offset_right = 784.0
+offset_bottom = 396.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BackButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -177.5
+offset_top = 327.5
+offset_right = 177.5
+offset_bottom = 380.5
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_oohbw")
+text = "Go back to Main Menu"
+
+[node name="Red" type="ColorRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -532.0
+offset_top = -212.0
+offset_right = -468.0
+offset_bottom = -148.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 0, 0, 1)
+
+[node name="Blue" type="ColorRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -404.0
+offset_top = -212.0
+offset_right = -340.0
+offset_bottom = -148.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 1, 1)
+
+[node name="Orange" type="ColorRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -276.0
+offset_top = -212.0
+offset_right = -212.0
+offset_bottom = -148.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 0.521569, 0, 1)
+
+[node name="Cyan" type="ColorRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -148.0
+offset_top = -212.0
+offset_right = -84.0
+offset_bottom = -148.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 1, 1, 1)
+
+[node name="Yellow" type="ColorRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -212.0
+offset_right = 44.0
+offset_bottom = -148.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 0, 1)
+
+[node name="Purple" type="ColorRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 108.0
+offset_top = -212.0
+offset_right = 172.0
+offset_bottom = -148.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.501961, 0, 0.713726, 1)
+
+[node name="Maroon" type="ColorRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 236.0
+offset_top = -212.0
+offset_right = 300.0
+offset_bottom = -148.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.94, 0, 0.47, 1)
+
+[node name="Brown" type="ColorRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 364.0
+offset_top = -212.0
+offset_right = 428.0
+offset_bottom = -148.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.640916, 0.355151, 7.70092e-07, 1)
+
+[node name="Primary" type="ColorRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -96.0
+offset_top = 224.0
+offset_right = -32.0
+offset_bottom = 288.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(32, 32)
+
+[node name="Secondary" type="ColorRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 32.0
+offset_top = 224.0
+offset_right = 96.0
+offset_bottom = 288.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(32, 32)
+
+[node name="SelectedLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -110.5
+offset_top = 171.0
+offset_right = 110.5
+offset_bottom = 213.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 30
+text = "Selected Colors"
+
+[connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="gui_input" from="Red" to="." method="_on_red_gui_input"]
+[connection signal="gui_input" from="Blue" to="." method="_on_blue_gui_input"]
+[connection signal="gui_input" from="Orange" to="." method="_on_orange_gui_input"]
+[connection signal="gui_input" from="Cyan" to="." method="_on_cyan_gui_input"]
+[connection signal="gui_input" from="Yellow" to="." method="_on_yellow_gui_input"]
+[connection signal="gui_input" from="Purple" to="." method="_on_purple_gui_input"]
+[connection signal="gui_input" from="Maroon" to="." method="_on_maroon_gui_input"]
+[connection signal="gui_input" from="Brown" to="." method="_on_brown_gui_input"]
+[connection signal="gui_input" from="Primary" to="." method="_on_primary_gui_input"]
+[connection signal="gui_input" from="Secondary" to="." method="_on_secondary_gui_input"]
