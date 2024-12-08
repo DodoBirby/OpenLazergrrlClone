@@ -3,7 +3,7 @@ extends Block
 
 @export var product: PackedScene
 
-func interact(player: Player) -> void:
+func interact(player: Player, _pos) -> void:
 	if player.team != team:
 		return
 	if player.held_block:
