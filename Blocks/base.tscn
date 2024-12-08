@@ -1,0 +1,219 @@
+[gd_scene load_steps=6 format=3 uid="uid://c7i1voa3do2kk"]
+
+[ext_resource type="Script" path="res://base.gd" id="1_wgrey"]
+[ext_resource type="Shader" path="res://Blocks/block.gdshader" id="2_5guaq"]
+[ext_resource type="Texture2D" uid="uid://e35p2hinfbp5" path="res://Assets/Red/Base_Transparent_-_Red_64x64.png" id="3_0320e"]
+[ext_resource type="Texture2D" uid="uid://chpdb0om762ga" path="res://Assets/Energy_Fill.png" id="4_gxpd5"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_c2p6d"]
+resource_local_to_scene = true
+shader = ExtResource("2_5guaq")
+shader_parameter/percent_health = 0.8
+shader_parameter/primary_color = Color(1, 0, 0, 1)
+shader_parameter/secondary_color = null
+
+[node name="Base" type="Node2D"]
+script = ExtResource("1_wgrey")
+texture = ExtResource("3_0320e")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_c2p6d")
+texture = ExtResource("3_0320e")
+
+[node name="Sprites" type="Node2D" parent="."]
+unique_name_in_owner = true
+
+[node name="EnergyBalls" type="Node2D" parent="Sprites"]
+unique_name_in_owner = true
+metadata/_edit_group_ = true
+
+[node name="EnergyFill" type="Sprite2D" parent="Sprites/EnergyBalls"]
+position = Vector2(-81, 81)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyFill2" type="Sprite2D" parent="Sprites/EnergyBalls"]
+position = Vector2(-67, 81)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyFill3" type="Sprite2D" parent="Sprites/EnergyBalls"]
+position = Vector2(-53, 81)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyFill4" type="Sprite2D" parent="Sprites/EnergyBalls"]
+position = Vector2(-39, 81)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyFill5" type="Sprite2D" parent="Sprites/EnergyBalls"]
+position = Vector2(-25, 81)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyFill6" type="Sprite2D" parent="Sprites/EnergyBalls"]
+position = Vector2(-81, 54)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyFill7" type="Sprite2D" parent="Sprites/EnergyBalls"]
+position = Vector2(-67, 54)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyFill8" type="Sprite2D" parent="Sprites/EnergyBalls"]
+position = Vector2(-53, 54)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyFill9" type="Sprite2D" parent="Sprites/EnergyBalls"]
+position = Vector2(-39, 54)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyFill10" type="Sprite2D" parent="Sprites/EnergyBalls"]
+position = Vector2(-25, 54)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyFill11" type="Sprite2D" parent="Sprites/EnergyBalls"]
+position = Vector2(-81, 27)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyFill12" type="Sprite2D" parent="Sprites/EnergyBalls"]
+position = Vector2(-67, 27)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyFill13" type="Sprite2D" parent="Sprites/EnergyBalls"]
+position = Vector2(-53, 27)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyFill14" type="Sprite2D" parent="Sprites/EnergyBalls"]
+position = Vector2(-39, 27)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyFill15" type="Sprite2D" parent="Sprites/EnergyBalls"]
+position = Vector2(-25, 27)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyFill16" type="Sprite2D" parent="Sprites/EnergyBalls"]
+position = Vector2(-81, 0)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyFill17" type="Sprite2D" parent="Sprites/EnergyBalls"]
+position = Vector2(-67, 0)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyFill18" type="Sprite2D" parent="Sprites/EnergyBalls"]
+position = Vector2(-53, 0)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyFill19" type="Sprite2D" parent="Sprites/EnergyBalls"]
+position = Vector2(-39, 0)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyFill20" type="Sprite2D" parent="Sprites/EnergyBalls"]
+position = Vector2(-25, 0)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyFill21" type="Sprite2D" parent="Sprites/EnergyBalls"]
+position = Vector2(-81, -27)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyFill22" type="Sprite2D" parent="Sprites/EnergyBalls"]
+position = Vector2(-67, -27)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyFill23" type="Sprite2D" parent="Sprites/EnergyBalls"]
+position = Vector2(-53, -27)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyFill24" type="Sprite2D" parent="Sprites/EnergyBalls"]
+position = Vector2(-39, -27)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyFill25" type="Sprite2D" parent="Sprites/EnergyBalls"]
+position = Vector2(-25, -27)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyFill26" type="Sprite2D" parent="Sprites/EnergyBalls"]
+position = Vector2(-81, -54)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyFill27" type="Sprite2D" parent="Sprites/EnergyBalls"]
+position = Vector2(-67, -54)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyFill28" type="Sprite2D" parent="Sprites/EnergyBalls"]
+position = Vector2(-53, -54)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyFill29" type="Sprite2D" parent="Sprites/EnergyBalls"]
+position = Vector2(-39, -54)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyFill30" type="Sprite2D" parent="Sprites/EnergyBalls"]
+position = Vector2(-25, -54)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyFill31" type="Sprite2D" parent="Sprites/EnergyBalls"]
+position = Vector2(-81, -81)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyFill32" type="Sprite2D" parent="Sprites/EnergyBalls"]
+position = Vector2(-67, -81)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyFill33" type="Sprite2D" parent="Sprites/EnergyBalls"]
+position = Vector2(-53, -81)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyFill34" type="Sprite2D" parent="Sprites/EnergyBalls"]
+position = Vector2(-39, -81)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyFill35" type="Sprite2D" parent="Sprites/EnergyBalls"]
+position = Vector2(-25, -81)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyNetBar" type="Node2D" parent="Sprites"]
+unique_name_in_owner = true
+
+[node name="EnergyNet" type="Sprite2D" parent="Sprites/EnergyNetBar"]
+position = Vector2(-3, 77)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyNet2" type="Sprite2D" parent="Sprites/EnergyNetBar"]
+position = Vector2(-3, 63)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyNet3" type="Sprite2D" parent="Sprites/EnergyNetBar"]
+position = Vector2(-3, 49)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyNet4" type="Sprite2D" parent="Sprites/EnergyNetBar"]
+position = Vector2(-3, 35)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyNet5" type="Sprite2D" parent="Sprites/EnergyNetBar"]
+position = Vector2(-3, 21)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyNet6" type="Sprite2D" parent="Sprites/EnergyNetBar"]
+position = Vector2(-3, 7)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyNet7" type="Sprite2D" parent="Sprites/EnergyNetBar"]
+position = Vector2(-3, -7)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyNet8" type="Sprite2D" parent="Sprites/EnergyNetBar"]
+position = Vector2(-3, -21)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyNet9" type="Sprite2D" parent="Sprites/EnergyNetBar"]
+position = Vector2(-3, -35)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyNet10" type="Sprite2D" parent="Sprites/EnergyNetBar"]
+position = Vector2(-3, -49)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyNet11" type="Sprite2D" parent="Sprites/EnergyNetBar"]
+position = Vector2(-3, -63)
+texture = ExtResource("4_gxpd5")
+
+[node name="EnergyNet12" type="Sprite2D" parent="Sprites/EnergyNetBar"]
+position = Vector2(-3, -77)
+texture = ExtResource("4_gxpd5")

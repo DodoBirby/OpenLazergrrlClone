@@ -53,18 +53,14 @@ unique_name_in_owner = true
 layout_mode = 2
 placeholder_text = "Enter Name"
 
-[node name="HostButton" type="Button" parent="VBoxContainer"]
-layout_mode = 2
-text = "Host Lobby"
-
 [node name="HostPortField" type="LineEdit" parent="VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 placeholder_text = "Enter port to host on"
 
-[node name="JoinButton" type="Button" parent="VBoxContainer"]
+[node name="HostButton" type="Button" parent="VBoxContainer"]
 layout_mode = 2
-text = "Join Lobby"
+text = "Host Lobby"
 
 [node name="IpField" type="LineEdit" parent="VBoxContainer"]
 unique_name_in_owner = true
@@ -75,6 +71,10 @@ placeholder_text = "Enter Host IP Address"
 unique_name_in_owner = true
 layout_mode = 2
 placeholder_text = "Enter Host Port"
+
+[node name="JoinButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Join Lobby"
 
 [node name="OptionsButton" type="Button" parent="VBoxContainer"]
 layout_mode = 2

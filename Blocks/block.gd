@@ -10,6 +10,8 @@ var grid: Grid = preload("res://Grid/Grid.tres")
 var game_master: GameMaster
 var MAX_HEALTH: int = 1
 static var all_directions: Array[Vector2i] = [Vector2i.DOWN, Vector2i.UP, Vector2i.LEFT, Vector2i.RIGHT]
+var primary_color: Color
+var secondary_color: Color
 
 # Initialized state
 @export var team: Constants.Teams = Constants.Teams.RED
@@ -49,12 +51,14 @@ func _network_spawn(data: Dictionary) -> void:
 	sprite.scale.x = 0.5
 	sprite.scale.y = 0.5
 	sprite.texture = texture
-	var color = Color.RED if team == Constants.Teams.RED else Color.BLUE
-	sprite.material.set_shader_parameter("primary_color", color)
+	primary_color = Color.RED if team == Constants.Teams.RED else Color.BLUE
+	secondary_color = Color.YELLOW if team == Constants.Teams.RED else Color.CYAN
+	sprite.material.set_shader_parameter("primary_color", primary_color)
+	sprite.material.set_shader_parameter("secondary_color", secondary_color)
 
 #region Virtual Block Methods
 # Called when the player uses action while targeting this block on the field
-func interact(_player: Player) -> void:
+func interact(_player: Player, _pos: Vector2i) -> void:
 	pass
 
 # Called when player targets an empty location on the field with this block in hand

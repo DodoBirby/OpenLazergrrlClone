@@ -9,7 +9,8 @@ var fake_gen_targets: Array[Lazer] = []
 var fake_gen_timers: Array[int] = []
 
 func _ready() -> void:
-	add_to_group("network_sync")
+	super()
+	_network_spawn({ "team": team })
 	EventBus.lazer_deregistered.connect(_on_lazer_deregistered)
 
 func power_up() -> void:

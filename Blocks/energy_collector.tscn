@@ -10,6 +10,7 @@ resource_local_to_scene = true
 shader = ExtResource("3_exj0w")
 shader_parameter/percent_health = 0.0
 shader_parameter/primary_color = null
+shader_parameter/secondary_color = null
 
 [node name="EnergyCollector" instance=ExtResource("1_o3pqf")]
 script = ExtResource("1_jgh2j")

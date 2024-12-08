@@ -9,10 +9,12 @@ resource_local_to_scene = true
 shader = ExtResource("3_7vldf")
 shader_parameter/percent_health = 0.0
 shader_parameter/primary_color = null
+shader_parameter/secondary_color = null
 
 [node name="Shop" instance=ExtResource("1_mat2t")]
 script = ExtResource("1_u7kog")
 product = null
+team = null
 
 [node name="Sprite" parent="." index="0"]
 material = SubResource("ShaderMaterial_w3n6q")

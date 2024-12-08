@@ -39,6 +39,7 @@ func _input(event: InputEvent) -> void:
 		return
 	if current_rebind_button:
 		var action = current_rebind_button.internal_action_name
+		event.keycode = KEY_NONE
 		InputMap.action_erase_events(action)
 		InputMap.action_add_event(action, event)
 		current_rebind_button.update_text()

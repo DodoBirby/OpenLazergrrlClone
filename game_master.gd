@@ -28,6 +28,9 @@ var collectors: Array[EnergyCollector]
 var players: Array[Player]
 var exclusion_zones: Array[ExclusionZone]
 
+# Constant
+var directions = [Vector2i.LEFT, Vector2i.UP, Vector2i.DOWN, Vector2i.RIGHT, Vector2i(1, 1), Vector2i(-1, 1), Vector2i(-1, -1), Vector2i(1, -1)]
+
 # for test game only
 var left_player = 1
 var right_player = 2
@@ -91,7 +94,7 @@ func _network_process(_input: Dictionary) -> void:
 	for player in desired_interacts:
 		var pos = desired_interacts[player] + player.tile_pos
 		if block_map.has(pos):
-			block_map[pos].interact(player)
+			block_map[pos].interact(player, pos)
 		elif player.held_block and can_place(pos):
 			player.held_block.place(player, pos)
 	desired_interacts.clear()
@@ -222,6 +225,9 @@ func is_reactor_spot(pos: Vector2i) -> bool:
 
 func get_base_health(team: int) -> int:
 	return base_healthbars[team]
+	
+func get_base_net_energy(team: int) -> int:
+	return base_net_energy[team]
 
 func tile_occupied(pos: Vector2i) -> bool:
 	return has_player(pos) or block_map.has(pos)
@@ -255,15 +261,21 @@ func register_block(block: Block, pos: Vector2i) -> void:
 		generators.append(block)
 	elif block is EnergyCollector:
 		collectors.append(block)
+	elif block is Base:
+		for dir in directions:
+			block_map[pos + dir] = block
 
 func deregister_block(pos: Vector2i) -> void:
-	block_map[pos].deregister()
-	if block_map[pos] is Lazer:
-		lazers.erase(block_map[pos])
-	elif block_map[pos] is Generator:
-		generators.erase(block_map[pos])
+	var block = block_map[pos]
+	block.deregister()
+	if block is Lazer:
+		lazers.erase(block)
+	elif block is Generator:
+		generators.erase(block)
 	block_map.erase(pos)
-	
+	if block is Base:
+		for dir in directions:
+			block_map.erase(pos + dir)
 
 func register_desired_move(player: Player, move: Vector2i) -> void:
 	if block_map.has(move) or not level.tile_has_floor(move) or is_excluded(player.team, move):
@@ -287,9 +299,8 @@ func move_hand_to_field(player: Player, pos: Vector2i) -> void:
 	register_block(block, pos)
 	player.held_block = null
 	
-func deal_base_damage(team: int, amount: int):
-	base_healthbars[team] -= amount
-	if base_healthbars[team] <= 0 and SyncManager.ensure_current_tick_input_complete():
+func kill_base(team: int):
+	if SyncManager.ensure_current_tick_input_complete():
 		end_game_label.visible = true
 		end_game_label.text = "Team %s loses!" % team
 		end_game()

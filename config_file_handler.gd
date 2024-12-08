@@ -1,6 +1,6 @@
 extends Node
 
-const config_path = "user://settings.ini"
+const config_path = "user://settingsv2.ini"
 
 var cfg = ConfigFile.new()
 
@@ -22,14 +22,14 @@ func _ready() -> void:
 		reverse_mapping[name_mapping[key]] = key
 	
 	if not FileAccess.file_exists(config_path):
-		cfg.set_value("Keybindings", "MoveUp", "W")
-		cfg.set_value("Keybindings", "MoveDown", "S")
-		cfg.set_value("Keybindings", "MoveRight", "D")
-		cfg.set_value("Keybindings", "MoveLeft", "A")
-		cfg.set_value("Keybindings", "TurnUp", "I")
-		cfg.set_value("Keybindings", "TurnDown", "K")
-		cfg.set_value("Keybindings", "TurnLeft", "J")
-		cfg.set_value("Keybindings", "TurnRight", "L")
+		cfg.set_value("Keybindings", "MoveUp", "%W")
+		cfg.set_value("Keybindings", "MoveDown", "%S")
+		cfg.set_value("Keybindings", "MoveRight", "%D")
+		cfg.set_value("Keybindings", "MoveLeft", "%A")
+		cfg.set_value("Keybindings", "TurnUp", "%I")
+		cfg.set_value("Keybindings", "TurnDown", "%K")
+		cfg.set_value("Keybindings", "TurnLeft", "%J")
+		cfg.set_value("Keybindings", "TurnRight", "%L")
 		cfg.save(config_path)
 	else:
 		cfg.load(config_path)
@@ -40,15 +40,28 @@ func load_input_from_cfg():
 		var action_name = name_mapping.get(key)
 		if not action_name:
 			continue
-		var cfgvalue = cfg.get_value("Keybindings", key)
+		var cfgvalue: String = cfg.get_value("Keybindings", key)
+		var splitstring = cfgvalue.split("%")
+		var keycode = splitstring[1]
+		var location = splitstring[0]
 		var event = InputEventKey.new()
-		event.keycode = OS.find_keycode_from_string(cfgvalue)
+		event.physical_keycode = OS.find_keycode_from_string(keycode)
+		if location == "left":
+			event.location = KEY_LOCATION_LEFT
+		elif location == "right":
+			event.location = KEY_LOCATION_RIGHT
+		else:
+			event.location = KEY_LOCATION_UNSPECIFIED
 		InputMap.action_erase_events(action_name)
 		InputMap.action_add_event(action_name, event)
 
 func save_input_to_cfg():
 	for key in reverse_mapping:
 		var events = InputMap.action_get_events(key)
+		var location_string = ""
+		if events[0] is InputEventKey:
+			location_string = events[0].as_text_location()
+			
 		if events.size() > 0:
-			cfg.set_value("Keybindings", reverse_mapping[key], OS.get_keycode_string(events[0].keycode))
+			cfg.set_value("Keybindings", reverse_mapping[key], location_string + "%" + OS.get_keycode_string(events[0].physical_keycode))
 	cfg.save(config_path)

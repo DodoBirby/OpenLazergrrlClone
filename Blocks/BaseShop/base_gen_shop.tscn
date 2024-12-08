@@ -10,6 +10,7 @@ resource_local_to_scene = true
 shader = ExtResource("5_hhhaq")
 shader_parameter/percent_health = 0.0
 shader_parameter/primary_color = null
+shader_parameter/secondary_color = null
 
 [node name="BaseGenShop" instance=ExtResource("1_6gxj8")]
 product = ExtResource("2_2dflg")
