@@ -16,7 +16,7 @@ config/features=PackedStringArray("4.3", "GL Compatibility")
 boot_splash/image="res://Assets/Red/Lazer_-_Red_64x64.png"
 boot_splash/fullsize=false
 boot_splash/use_filter=false
-config/icon="res://icon.svg"
+config/icon="res://.Export/Lazer.png"
 config/windows_native_icon="res://icon.ico"
 
 [autoload]
@@ -116,14 +116,12 @@ player1_turnright={
 
 [network]
 
-rollback/max_buffer_size=12
+rollback/max_buffer_size=15
 rollback/input_delay=1
 rollback/interpolation=true
 rollback/limits/max_input_frames_per_message=10
 rollback/limits/max_messages_at_once=5
 rollback/classes/message_serializer="res://CustomMessageSerializer.gd"
-rollback/debug/rollback_ticks=5
-rollback/debug/random_rollback_ticks=3
 rollback/debug/physics_process_msecs=26.0
 
 [physics]

@@ -57,12 +57,14 @@ position = Vector2(352, 544)
 [node name="ExclusionZone" parent="GameMaster" index="11" instance=ExtResource("14_dm8oo")]
 position = Vector2(288, 224)
 end_pos = Vector2i(7, 13)
+growth_timer = 1350
 growth_amount = Vector2i(-1, 0)
 
 [node name="ExclusionZone2" parent="GameMaster" index="12" instance=ExtResource("14_dm8oo")]
 position = Vector2(1184, 224)
 end_pos = Vector2i(15, 13)
 team = 2
+growth_timer = 1350
 growth_amount = Vector2i(1, 0)
 
 [node name="RedBase" parent="GameMaster" index="13" instance=ExtResource("9_qxus6")]
